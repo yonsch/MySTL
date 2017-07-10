@@ -13,11 +13,12 @@ public:
 
 	Face();
 
-	Face(Vector3D v1, Vector3D v2, Vector3D v3);
+	Face(Vector3D v1, Vector3D v2, Vector3D v3,Vector3D n);
 
 	Vector3D v1;
 	Vector3D v2;
 	Vector3D v3;
+	Vector3D n;
 
 	string toString();
 

@@ -48,6 +48,6 @@ string Vector3D::toString() {
 
 ostream& operator<<(ostream& strm, const Vector3D &a) {
 	
-	strm << "(" << std::to_string(a.x) << "," << std::to_string(a.y) << "," << std::to_string(a.z) << ")";
+	strm << "(" << a.x << "," << a.y << "," << a.z << ")";
 	return strm;
 }

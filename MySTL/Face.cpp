@@ -10,10 +10,11 @@ Face::Face() {
 	v3 = v;
 }
 
-Face::Face(Vector3D p1, Vector3D p2, Vector3D p3) {
+Face::Face(Vector3D p1, Vector3D p2, Vector3D p3, Vector3D no) {
 	v1 = p1;
 	v2 = p2;
 	v3 = p3;
+	n = no;
 }
 
 
