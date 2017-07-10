@@ -5,7 +5,8 @@
 #include <iterator>
 #include <vector>
 #include "iostream"
-#include "Face.h"
+
+
 
 using namespace std;
 
@@ -72,11 +73,9 @@ STLMesh::STLMesh(string p) {
 
 float STLMesh::btof(unsigned char b0, unsigned char b1, unsigned char b2, unsigned char b3)
 {
-	unsigned char byte_array[] = { b3, b2, b1, b0 };
+	unsigned char b[] = { b3, b2, b1, b0 };
 	float result;
-	std::copy(reinterpret_cast<const char*>(&byte_array[0]),
-		reinterpret_cast<const char*>(&byte_array[4]),
-		reinterpret_cast<char*>(&result));
+	memcpy(&result, &b, sizeof(result));
 	return result;
 }
 

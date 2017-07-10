@@ -2,6 +2,7 @@
 #define STLMesh_H
 #include <string>
 #include <vector>
+#include "Face.h"
 
 using namespace std;
 
