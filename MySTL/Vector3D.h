@@ -16,11 +16,13 @@ public:
 	Vector3D(float xCoord, float yCoord, float zCoord);
 	Vector3D(const Vector3D& v);
 	Vector3D& operator= (const Vector3D& rhs);
-
+	
 	string toString();
 
 private:
 
 };
+
+std::ostream& operator<<(ostream& strm, const Vector3D &a);
 
 #endif

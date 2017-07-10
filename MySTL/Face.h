@@ -25,4 +25,6 @@ public:
 
 };
 
+std::ostream& operator<<(ostream& strm, const Face &a);
+
 #endif

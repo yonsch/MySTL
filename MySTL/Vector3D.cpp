@@ -44,3 +44,10 @@ Vector3D& Vector3D::operator=(const Vector3D& rhs) {
 string Vector3D::toString() {
 	return  "(" + std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(z) + ")";
 }
+
+
+ostream& operator<<(ostream& strm, const Vector3D &a) {
+	
+	strm << "(" << std::to_string(a.x) << "," << std::to_string(a.y) << "," << std::to_string(a.z) << ")";
+	return strm;
+}

@@ -20,3 +20,9 @@ Face::Face(Vector3D p1, Vector3D p2, Vector3D p3) {
 string Face::toString() {
 	return "<" + v1.toString() + "," + v2.toString() + "," + v3.toString() + ">";
 }
+
+ostream& operator<<(ostream& strm, const Face &a) {
+
+	strm << "<" << a.v1 << "," << a.v2 << "," << a.v3 << ">";
+	return strm;
+}
