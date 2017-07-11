@@ -18,10 +18,11 @@ public:
 	STLMesh();
 	~STLMesh();
 
-	STLMesh(string p);
+	STLMesh(string);
 
 	float btof(unsigned char, unsigned char, unsigned char, unsigned char);
-
+	void toFile(string);
+	unsigned char * STLMesh::writeFloat(float);
 
 
 private:

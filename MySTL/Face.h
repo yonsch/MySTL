@@ -1,6 +1,7 @@
 #ifndef Face_H
 #define Face_H
 
+#include <vector>
 #include "Vector3D.h"
 
 class Face {
@@ -22,6 +23,7 @@ public:
 
 	string toString();
 
+	vector<float> getFloats();
 
 
 };
