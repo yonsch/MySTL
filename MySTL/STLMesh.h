@@ -29,6 +29,4 @@ private:
 
 };
 
-//std::ostream& operator<<(ostream& strm, const STLMesh &a);
-
 #endif

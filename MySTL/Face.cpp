@@ -23,7 +23,6 @@ string Face::toString() {
 }
 
 ostream& operator<<(ostream& strm, const Face &a) {
-
 	strm << "<" << a.v1 << "," << a.v2 << "," << a.v3 << ">";
 	return strm;
 }
@@ -42,14 +41,5 @@ vector<float> Face::getFloats() {
 	arr[9] = n.x;
 	arr[10] = n.y;
 	arr[11] = n.z;
-	
-	//cout << v1.x << endl;
-
-	for (int j = 0; j < 12; j++) {
-		float f = arr[j];
-		//output.write((char *)&f, sizeof(float));
-		//cout << f << endl;
-	}
-
 	return arr;
 }
