@@ -13,6 +13,7 @@ public:
 
 	Face();
 	Face(Vector3D v1, Vector3D v2, Vector3D v3,Vector3D n);
+	Face(Vector3D v1, Vector3D v2, Vector3D v3);
 	string toString();
 	vector<float> getFloats();
 };

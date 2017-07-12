@@ -84,6 +84,10 @@ void STLMesh::toFile(string path) {
 
 	//write header
 	output << header;
+	unsigned char z = 0;
+	for (int i = 0; i < 80 - header.size(); i++) {
+		output << z;
+	}
 
 	//write tri count
 	for (int i = 0; i < 4; i++) 
