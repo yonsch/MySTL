@@ -1,4 +1,8 @@
-﻿  Face.cpp
-cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
+﻿  STLMesh.cpp
+c:\users\yonch\documents\visual studio 2017\projects\mystl\mystl\stlmesh.cpp(90): warning C4018: '<': signed/unsigned mismatch
+c:\users\yonch\documents\visual studio 2017\projects\mystl\mystl\stlmesh.cpp(113): warning C4018: '<': signed/unsigned mismatch
+  MySTL.cpp
+  Generating Code...
+c:\users\yonch\documents\visual studio 2017\projects\mystl\mystl\stlmesh.cpp(78): warning C4172: returning address of local variable or temporary: b
   MySTL.vcxproj -> C:\Users\Yonch\documents\visual studio 2017\Projects\MySTL\Debug\MySTL.exe
   MySTL.vcxproj -> C:\Users\Yonch\documents\visual studio 2017\Projects\MySTL\Debug\MySTL.pdb (Partial PDB)

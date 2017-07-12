@@ -42,6 +42,10 @@ STLMesh::STLMesh(string p) {
 	//read triangles
 	for (int i = 0; i < triCount; i++) {
 		int p = 84 + i * 50;
+		Vector3D n = Vector3D(btof(buffer[p], buffer[p + 1], buffer[p + 2], buffer[p + 3]),
+			btof(buffer[p + 4], buffer[p + 5], buffer[p + 6], buffer[p + 7]),
+			btof(buffer[p + 8], buffer[p + 9], buffer[p + 10], buffer[p + 11]));
+		p += 12;
 		Vector3D v1 = Vector3D(btof(buffer[p], buffer[p + 1], buffer[p + 2], buffer[p + 3]),
 			btof(buffer[p + 4], buffer[p + 5], buffer[p + 6], buffer[p + 7]),
 			btof(buffer[p + 8], buffer[p + 9], buffer[p + 10], buffer[p + 11]));
@@ -53,10 +57,8 @@ STLMesh::STLMesh(string p) {
 		Vector3D v3 = Vector3D(btof(buffer[p], buffer[p + 1], buffer[p + 2], buffer[p + 3]), 
 			btof(buffer[p + 4], buffer[p + 5], buffer[p + 6], buffer[p + 7]), 
 			btof(buffer[p + 8], buffer[p + 9], buffer[p + 10], buffer[p + 11]));
-		p += 12;
-		Vector3D n = Vector3D(btof(buffer[p], buffer[p + 1], buffer[p + 2], buffer[p + 3]), 
-			btof(buffer[p + 4], buffer[p + 5], buffer[p + 6], buffer[p + 7]), 
-			btof(buffer[p + 8], buffer[p + 9], buffer[p + 10], buffer[p + 11]));
+		
+		
 		Face f = Face(v1, v2, v3, n);
 		faces.push_back(f);
 	}
@@ -105,7 +107,43 @@ void STLMesh::toFile(string path) {
 	}
 }
 
+STLMesh& STLMesh::operator*(const float& rhs) {
+
+	vector<Face> newFaces;
+	for (int i = 0; i < faces.size(); i++) {
+		newFaces.push_back(faces[i] * rhs);
+	}
+
+	this->faces = newFaces;
+	this->path = path;
+	this->fileName = fileName;
+	this->triCount = triCount;
+	this->header = header;
+
+	return *this;
+}
 
 
 
 
+
+void STLMesh::sayHello() {
+	cout << "hello" << endl;
+}
+void STLMesh::pyramid(Vector3D a, Vector3D b, Vector3D c, Vector3D d, string path) {
+	Face f1 = Face(a, b, c);
+	Face f2 = Face(d, b, a);
+	Face f3 = Face(c, b, d);
+	Face f4 = Face(c, d, a);
+	vector<Face> faces;
+	faces.push_back(f1);
+	faces.push_back(f2);
+	faces.push_back(f3);
+	faces.push_back(f4);
+	STLMesh m;
+	m.faces = faces;
+	m.path = "C:\\Users\\Yonch\\Desktop\\f.stl";
+	m.header = "please work";
+	m.triCount = m.faces.size();
+	m.toFile(path);
+}

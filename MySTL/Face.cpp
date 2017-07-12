@@ -30,13 +30,8 @@ Face::Face(Vector3D p1, Vector3D p2, Vector3D p3) {
 	n = Vector3D(x/d,y/d,z/d);
 }
 
-
-string Face::toString() {
-	return "<" + v1.toString() + "," + v2.toString() + "," + v3.toString() + ">";
-}
-
 ostream& operator<<(ostream& strm, const Face &a) {
-	strm << "<" << a.v1 << "," << a.v2 << "," << a.v3 << "," << a.n << ">";
+	strm << "<" << a.n << "," << a.v1 << "," << a.v2 << "," << a.v3 << ">";
 	return strm;
 }
 
@@ -56,4 +51,16 @@ vector<float> Face::getFloats() {
 	arr[11] = v3.z;
 	
 	return arr;
+}
+
+
+Face& Face::operator*(const float& rhs) {
+
+	
+	this->v1 = v1*rhs;
+	this->v2 = v2*rhs;
+	this->v3 = v3*rhs;
+	this->n = n;
+	
+	return *this;
 }

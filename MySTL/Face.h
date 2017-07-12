@@ -16,6 +16,8 @@ public:
 	Face(Vector3D v1, Vector3D v2, Vector3D v3);
 	string toString();
 	vector<float> getFloats();
+
+	Face& operator* (const float& rhs);
 };
 
 std::ostream& operator<<(ostream& strm, const Face &a);

@@ -24,6 +24,11 @@ public:
 	void toFile(string);
 	unsigned char * STLMesh::writeFloat(float);
 
+	STLMesh& operator* (const float& rhs);
+
+	static void sayHello();
+	static void pyramid(Vector3D, Vector3D, Vector3D, Vector3D, string);
+
 
 private:
 
