@@ -5,6 +5,7 @@
 #include <iterator>
 #include <vector>
 #include "iostream"
+#include <math.h>
 
 using namespace std;
 
@@ -127,9 +128,6 @@ STLMesh& STLMesh::operator*(const float& rhs) {
 
 
 
-void STLMesh::sayHello() {
-	cout << "hello" << endl;
-}
 void STLMesh::pyramid(Vector3D a, Vector3D b, Vector3D c, Vector3D d, string path) {
 	Face f1 = Face(a, b, c);
 	Face f2 = Face(d, b, a);
@@ -146,4 +144,103 @@ void STLMesh::pyramid(Vector3D a, Vector3D b, Vector3D c, Vector3D d, string pat
 	m.header = "please work";
 	m.triCount = m.faces.size();
 	m.toFile(path);
+}
+
+
+STLMesh STLMesh::prism(vector<Vector3D> layer, Vector3D h) {
+
+	vector<Face> faces;
+
+	//create vertices:
+	
+	vector<Vector3D> copies;
+	Vector3D v;
+	for (int i = 0; i < layer.size(); i++) {
+		v = layer[i];
+		copies.push_back(v+h);
+	}
+
+	//create faces:
+
+	//two layers:
+	Face f;
+
+	vector<Vector3D> copyOfLayer = layer;
+	vector<Vector3D> copyOfCopies = copies;
+
+
+	
+	Vector3D a;
+	Vector3D b;
+	Vector3D c;
+	int index = 0;
+	while (copyOfLayer.size() > 3) {
+		a = copyOfLayer[index % copyOfLayer.size()];
+		b = copyOfLayer[(index+1) % copyOfLayer.size()];
+		c = copyOfLayer[(index+2) % copyOfLayer.size()];
+		if (goodAngle(a,b,c)) {
+			copyOfLayer.erase(copyOfLayer.begin() + (index + 1) % copyOfLayer.size());
+			index++;
+			faces.push_back(Face(a,b,c));
+			
+			
+		}
+		else {
+			index++;
+		}
+		
+		
+	}
+	faces.push_back(Face(copyOfLayer[0], copyOfLayer[1], copyOfLayer[2]));
+
+
+	index = 0;
+	while (copyOfCopies.size() > 3) {
+		a = copyOfCopies[index % copyOfCopies.size()];
+		b = copyOfCopies[(index + 1) % copyOfCopies.size()];
+		c = copyOfCopies[(index + 2) % copyOfCopies.size()];
+		if (goodAngle(a, b, c)) {
+			copyOfCopies.erase(copyOfCopies.begin() + (index + 1) % copyOfCopies.size());
+			index++;
+			faces.push_back(Face(a, b, c));
+			
+
+		}
+		else {
+			index++;
+		}
+		
+
+	}
+	faces.push_back(Face(copyOfCopies[0], copyOfCopies[1], copyOfCopies[2]));
+
+	
+
+	//sides:
+
+	int size = layer.size();
+	for (int i = 0; i < size; i++) {
+		f = Face(layer[i], copies[i], layer[(i + 1)%size]);
+		faces.push_back(f);
+		f = Face(layer[(i+1)%size], copies[(i+1)%size], copies[i]);
+		faces.push_back(f);
+	}
+
+	STLMesh mesh;
+	mesh.faces = faces;
+	mesh.triCount = faces.size();
+
+	for (int i = 0; i < faces.size() - 2; i++) {
+		cout << faces[i]<<endl;
+	}
+
+	return mesh;
+}
+bool STLMesh::goodAngle(Vector3D i, Vector3D j, Vector3D k) {
+	Vector3D a = k - j;
+	Vector3D b = i - j;
+	float z = a.x*b.y - a.y*b.x;
+	float sizeA = sqrt(a.x*a.x+a.y*a.y+a.z*a.z);
+	float sizeB = sqrt(b.x*b.x + b.y*b.y + b.z*b.z);
+	return  (z / (sizeA*sizeB)) < 0;
 }

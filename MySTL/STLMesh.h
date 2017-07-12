@@ -26,9 +26,10 @@ public:
 
 	STLMesh& operator* (const float& rhs);
 
-	static void sayHello();
+	
 	static void pyramid(Vector3D, Vector3D, Vector3D, Vector3D, string);
-
+	static STLMesh prism(vector<Vector3D>, Vector3D);
+	static bool goodAngle(Vector3D, Vector3D, Vector3D);
 
 private:
 
