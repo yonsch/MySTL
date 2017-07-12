@@ -168,7 +168,7 @@ STLMesh STLMesh::prism(vector<Vector3D> layer, Vector3D h) {
 	vector<Vector3D> copyOfLayer = layer;
 	vector<Vector3D> copyOfCopies = copies;
 
-
+	//goodAngle is defined on the bottom of this file
 	
 	Vector3D a;
 	Vector3D b;
@@ -182,14 +182,10 @@ STLMesh STLMesh::prism(vector<Vector3D> layer, Vector3D h) {
 			copyOfLayer.erase(copyOfLayer.begin() + (index + 1) % copyOfLayer.size());
 			index++;
 			faces.push_back(Face(a,b,c));
-			
-			
 		}
 		else {
 			index++;
 		}
-		
-		
 	}
 	faces.push_back(Face(copyOfLayer[0], copyOfLayer[1], copyOfLayer[2]));
 
@@ -209,8 +205,6 @@ STLMesh STLMesh::prism(vector<Vector3D> layer, Vector3D h) {
 		else {
 			index++;
 		}
-		
-
 	}
 	faces.push_back(Face(copyOfCopies[0], copyOfCopies[1], copyOfCopies[2]));
 
@@ -243,4 +237,36 @@ bool STLMesh::goodAngle(Vector3D i, Vector3D j, Vector3D k) {
 	float sizeA = sqrt(a.x*a.x+a.y*a.y+a.z*a.z);
 	float sizeB = sqrt(b.x*b.x + b.y*b.y + b.z*b.z);
 	return  (z / (sizeA*sizeB)) < 0;
+}
+
+STLMesh STLMesh::revolve(vector<Vector3D> vecs, float res) {
+	float PI = 3.14159265359;
+	vector<vector<Vector3D>> vertices;
+
+	//create point cloud
+	for (int layer = 0; layer < vecs.size(); layer++) {
+		vector<Vector3D> v;
+		vertices.push_back(v);
+		for (int i = 0; i < res; i++) {
+			vertices[layer].push_back(Vector3D(vecs[layer].x * cos(2 * i*PI / res), vecs[layer].x * sin(2 * i * PI / res), vecs[layer].z));
+		}
+	}
+
+
+	//make triangles
+	Face f;
+	vector<Face> faces;
+	int iterations = ((vecs[0].x == 0) && (vecs[vecs.size() - 1]).x == 0) ? vertices.size() - 1 : vertices.size();
+	for (int layer = 0; layer < iterations; layer++) {
+		for (int i = 0; i < res; i++) {
+			f = Face(vertices[layer][i], vertices[(layer + 1) % vertices.size()][i], vertices[layer][(i + 1) % vertices[layer].size()]);
+			faces.push_back(f);
+			f = Face(vertices[layer][(i + 1) % vertices[layer].size()], vertices[(layer + 1) % vertices.size()][(i + 1) % vertices[layer].size()], vertices[(layer + 1) % vertices.size()][i]);
+			faces.push_back(f);
+		}
+	}
+	STLMesh s;
+	s.faces = faces;
+	s.triCount = faces.size();
+	return s;
 }

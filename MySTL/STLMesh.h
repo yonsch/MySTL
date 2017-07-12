@@ -29,6 +29,7 @@ public:
 	
 	static void pyramid(Vector3D, Vector3D, Vector3D, Vector3D, string);
 	static STLMesh prism(vector<Vector3D>, Vector3D);
+	static STLMesh revolve(vector<Vector3D>,float);
 	static bool goodAngle(Vector3D, Vector3D, Vector3D);
 
 private:
