@@ -10,8 +10,6 @@
 using namespace std;
 
 STLMesh::STLMesh() {
-	path = "";
-	fileName = "";
 	header = "";
 	triCount = 0;
 	vector<Face> faces;
@@ -19,6 +17,12 @@ STLMesh::STLMesh() {
 
 STLMesh::~STLMesh() {
 
+}
+
+STLMesh::STLMesh(vector<Face> f, string h) {
+	header = h;
+	faces = f;
+	triCount = f.size();
 }
 
 STLMesh::STLMesh(string p) {
@@ -82,8 +86,7 @@ unsigned char * STLMesh::writeFloat(float f) {
 
 
 void STLMesh::toFile(string path) {
-	fileName = path;
-	ofstream output(fileName, ios::binary);
+	ofstream output(path, ios::binary);
 
 	//write header
 	output << header;
@@ -116,8 +119,7 @@ STLMesh& STLMesh::operator*(const float& rhs) {
 	}
 
 	this->faces = newFaces;
-	this->path = path;
-	this->fileName = fileName;
+	
 	this->triCount = triCount;
 	this->header = header;
 
@@ -128,26 +130,17 @@ STLMesh& STLMesh::operator*(const float& rhs) {
 
 
 
-void STLMesh::pyramid(Vector3D a, Vector3D b, Vector3D c, Vector3D d, string path) {
-	Face f1 = Face(a, b, c);
-	Face f2 = Face(d, b, a);
-	Face f3 = Face(c, b, d);
-	Face f4 = Face(c, d, a);
+vector<Face> STLMesh::pyramid(vector<Vector3D> v) {
 	vector<Face> faces;
-	faces.push_back(f1);
-	faces.push_back(f2);
-	faces.push_back(f3);
-	faces.push_back(f4);
-	STLMesh m;
-	m.faces = faces;
-	m.path = "C:\\Users\\Yonch\\Desktop\\f.stl";
-	m.header = "please work";
-	m.triCount = m.faces.size();
-	m.toFile(path);
+	faces.push_back(Face(v[0], v[1], v[2]));
+	faces.push_back(Face(v[3], v[1], v[0]));
+	faces.push_back(Face(v[2], v[1], v[3]));
+	faces.push_back(Face(v[2], v[3], v[0]));
+	return faces;
 }
 
 
-STLMesh STLMesh::prism(vector<Vector3D> layer, Vector3D h) {
+vector<Face> STLMesh::prism(vector<Vector3D> layer, Vector3D h) {
 
 	vector<Face> faces;
 
@@ -219,17 +212,9 @@ STLMesh STLMesh::prism(vector<Vector3D> layer, Vector3D h) {
 		f = Face(layer[(i+1)%size], copies[(i+1)%size], copies[i]);
 		faces.push_back(f);
 	}
-
-	STLMesh mesh;
-	mesh.faces = faces;
-	mesh.triCount = faces.size();
-
-	for (int i = 0; i < faces.size() - 2; i++) {
-		cout << faces[i]<<endl;
-	}
-
-	return mesh;
+	return faces;
 }
+
 bool STLMesh::goodAngle(Vector3D i, Vector3D j, Vector3D k) {
 	Vector3D a = k - j;
 	Vector3D b = i - j;
@@ -239,7 +224,7 @@ bool STLMesh::goodAngle(Vector3D i, Vector3D j, Vector3D k) {
 	return  (z / (sizeA*sizeB)) < 0;
 }
 
-STLMesh STLMesh::revolve(vector<Vector3D> vecs, float res) {
+vector<Face> STLMesh::revolve(vector<Vector3D> vecs, float res) {
 	float PI = 3.14159265359;
 	vector<vector<Vector3D>> vertices;
 
@@ -265,8 +250,5 @@ STLMesh STLMesh::revolve(vector<Vector3D> vecs, float res) {
 			faces.push_back(f);
 		}
 	}
-	STLMesh s;
-	s.faces = faces;
-	s.triCount = faces.size();
-	return s;
+	return faces;
 }

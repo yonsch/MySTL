@@ -9,8 +9,6 @@ using namespace std;
 class STLMesh {
 
 public:
-	string path;
-	string fileName;
 	string header;
 	int triCount;
 	vector<Face> faces;
@@ -19,6 +17,7 @@ public:
 	~STLMesh();
 
 	STLMesh(string);
+	STLMesh(vector<Face>,string);
 
 	float btof(unsigned char, unsigned char, unsigned char, unsigned char);
 	void toFile(string);
@@ -27,9 +26,9 @@ public:
 	STLMesh& operator* (const float& rhs);
 
 	
-	static void pyramid(Vector3D, Vector3D, Vector3D, Vector3D, string);
-	static STLMesh prism(vector<Vector3D>, Vector3D);
-	static STLMesh revolve(vector<Vector3D>,float);
+	static vector<Face> pyramid(vector<Vector3D>);
+	static vector<Face> prism(vector<Vector3D>, Vector3D);
+	static vector<Face> revolve(vector<Vector3D>,float);
 	static bool goodAngle(Vector3D, Vector3D, Vector3D);
 
 private:
