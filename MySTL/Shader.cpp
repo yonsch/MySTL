@@ -15,7 +15,7 @@ int createShader(const string& shader, int type) {
 	return id;
 }
 
-Shader::Shader(string vertex, string fragment) {
+Shader::Shader(const string& vertex, const string& fragment) {
 	int vertexID = createShader(vertex, GL_VERTEX_SHADER);
 	int fragmentID = createShader(fragment, GL_FRAGMENT_SHADER);
 
