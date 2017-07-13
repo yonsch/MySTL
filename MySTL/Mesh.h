@@ -8,12 +8,9 @@ using namespace std;
 
 class Mesh
 {
+	int id, size;
 public:
-	Mesh();
-	Mesh(float* ,int);
-	~Mesh();
-	int ID;
-	int size;
+	Mesh(float* data, int size);
 	void draw();
 };
 
