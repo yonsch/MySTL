@@ -29,6 +29,7 @@ public:
 	static vector<Face> pyramid(vector<Vector3D>);
 	static vector<Face> prism(vector<Vector3D>, Vector3D);
 	static vector<Face> revolve(vector<Vector3D>,float);
+	static vector<Vector3D> curve(float, float, int, bool, bool, float(*)(float));
 	static bool goodAngle(Vector3D, Vector3D, Vector3D);
 
 private:

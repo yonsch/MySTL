@@ -111,12 +111,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Examples.cpp" />
     <ClCompile Include="Face.cpp" />
     <ClCompile Include="MySTL.cpp" />
     <ClCompile Include="STLMesh.cpp" />
     <ClCompile Include="Vector3D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Examples.h" />
     <ClInclude Include="Face.h" />
     <ClInclude Include="STLMesh.h" />
     <ClInclude Include="Vector3D.h" />

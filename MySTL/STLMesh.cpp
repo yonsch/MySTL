@@ -248,3 +248,22 @@ vector<Face> STLMesh::revolve(vector<Vector3D> vecs, float res) {
 	}
 	return faces;
 }
+
+vector<Vector3D> STLMesh::curve(float start, float end, int res, bool closeStart, bool closeEnd, float(*function)(float)) {
+	float delta = (end - start) / res;
+	float x;
+	float z;
+	vector<Vector3D> vecs;
+	if (closeStart) {
+		vecs.push_back(Vector3D(0, 0, start));
+	}
+	for (int i = 0; i < res; i++) {
+		x = start + delta*(float)i;
+		z = function(x);
+		vecs.push_back(Vector3D(z, 0, x));
+	}
+	if (closeEnd) {
+		vecs.push_back(Vector3D(0, 0, end - delta));
+	}
+	return vecs;
+}
