@@ -3,6 +3,7 @@
 #include "glew.h"
 #include "Mesh.h"
 #include "Shader.h"
+#include <string>
 
 enum class GameState {PLAY, EXIT};
 
@@ -29,7 +30,10 @@ private:
 	GameState _gameState;
 	
 	float data[] = { -1, -1, 0, 0, 1, 0, 1, -1, 0 };
-	Mesh mesh(data);
-	Shader shader("in vec3 position;\nout vec3 pos;\nvoid main { pos = position; }", "in vec3 pos;\nout vec4 color;\n void main() { color = vec4(pos, 1.0); }");
+	Mesh mesh(data, 3);
+	
+	std::string vertex = "in vec3 position;\nout vec3 pos;\nvoid main { pos = position; }";
+	std::string fragment = "in vec3 pos;\nout vec4 color;\n void main() { color = vec4(pos, 1.0); }");
+	Shader shader(vertex, fragment); 
 };
 
