@@ -31,51 +31,34 @@ Vector3D::Vector3D(const Vector3D& v) :
 
 }
 
-Vector3D& Vector3D::operator=(const Vector3D& rhs) {
-
-	if (this != &rhs) {
-		this->x = rhs.x;
-		this->y = rhs.y;
-		this->z = rhs.z;
-	}
-	return *this;
+Vector3D Vector3D::operator-(const Vector3D& rhs) {
+	Vector3D v;
+	v.x = x - rhs.x;
+	v.y = y - rhs.y;
+	v.z = z - rhs.z;
+	return v;
 }
 
-Vector3D& Vector3D::operator-(const Vector3D& rhs) {
-
-	
-	this->x -= rhs.x;
-	this->y -= rhs.y;
-	this->z -= rhs.z;
-	
-	return *this;
+Vector3D Vector3D::operator+(const Vector3D& rhs) {
+	Vector3D v;
+	v.x = x + rhs.x;
+	v.y = y + rhs.y;
+	v.z = z + rhs.z;
+	return v;
 }
-Vector3D& Vector3D::operator+(const Vector3D& rhs) {
-
-
-	this->x += rhs.x;
-	this->y += rhs.y;
-	this->z += rhs.z;
-
-	return *this;
+Vector3D Vector3D::operator*(const float& rhs) {
+	Vector3D v;
+	v.x = x * rhs;
+	v.y = y * rhs;
+	v.z = z * rhs;
+	return v;
 }
-Vector3D& Vector3D::operator*(const float& rhs) {
-
-
-	this->x *= rhs;
-	this->y *= rhs;
-	this->z *= rhs;
-
-	return *this;
-}
-Vector3D& Vector3D::operator/(const float& rhs) {
-
-
-	this->x /= rhs;
-	this->y /= rhs;
-	this->z /= rhs;
-
-	return *this;
+Vector3D Vector3D::operator/(const float& rhs) {
+	Vector3D v;
+	v.x = x / rhs;
+	v.y = y / rhs;
+	v.z = z / rhs;
+	return v;
 }
 
 ostream& operator<<(ostream& strm, const Vector3D &a) {

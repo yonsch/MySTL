@@ -15,11 +15,10 @@ public:
 
 	Vector3D(float xCoord, float yCoord, float zCoord);
 	Vector3D(const Vector3D& v);
-	Vector3D& operator= (const Vector3D& rhs);
-	Vector3D& operator- (const Vector3D& rhs);
-	Vector3D& operator+ (const Vector3D& rhs);
-	Vector3D& operator* (const float& rhs);
-	Vector3D& operator/ (const float& rhs);
+	Vector3D operator- (const Vector3D& rhs);
+	Vector3D operator+ (const Vector3D& rhs);
+	Vector3D operator* (const float& rhs);
+	Vector3D operator/ (const float& rhs);
 
 	
 	string toString();

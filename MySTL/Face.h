@@ -17,7 +17,7 @@ public:
 	string toString();
 	vector<float> getFloats();
 
-	Face& operator* (const float& rhs);
+	Face operator* (const float& rhs);
 };
 
 std::ostream& operator<<(ostream& strm, const Face &a);

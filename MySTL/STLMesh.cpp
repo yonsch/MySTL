@@ -111,19 +111,16 @@ void STLMesh::toFile(string path) {
 	}
 }
 
-STLMesh& STLMesh::operator*(const float& rhs) {
-
+STLMesh STLMesh::operator*(const float& rhs) {
+	STLMesh m;
 	vector<Face> newFaces;
 	for (int i = 0; i < faces.size(); i++) {
 		newFaces.push_back(faces[i] * rhs);
 	}
-
-	this->faces = newFaces;
-	
-	this->triCount = triCount;
-	this->header = header;
-
-	return *this;
+	m.faces = newFaces;
+	m.triCount = triCount;
+	m.header = header;
+	return m;
 }
 
 
@@ -149,8 +146,7 @@ vector<Face> STLMesh::prism(vector<Vector3D> layer, Vector3D h) {
 	vector<Vector3D> copies;
 	Vector3D v;
 	for (int i = 0; i < layer.size(); i++) {
-		v = layer[i];
-		copies.push_back(v+h);
+		copies.push_back(layer[i]+h);
 	}
 
 	//create faces:

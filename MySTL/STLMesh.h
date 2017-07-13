@@ -23,7 +23,7 @@ public:
 	void toFile(string);
 	unsigned char * STLMesh::writeFloat(float);
 
-	STLMesh& operator* (const float& rhs);
+	STLMesh operator* (const float& rhs);
 
 	
 	static vector<Face> pyramid(vector<Vector3D>);

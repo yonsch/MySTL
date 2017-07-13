@@ -54,13 +54,11 @@ vector<float> Face::getFloats() {
 }
 
 
-Face& Face::operator*(const float& rhs) {
-
-	
-	this->v1 = v1*rhs;
-	this->v2 = v2*rhs;
-	this->v3 = v3*rhs;
-	this->n = n;
-	
-	return *this;
+Face Face::operator*(const float& rhs) {
+	Face f;
+	f.v1 = v1*rhs;
+	f.v2 = v2*rhs;
+	f.v3 = v3*rhs;
+	f.n = n;	
+	return f;
 }
