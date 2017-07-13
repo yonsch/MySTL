@@ -1,8 +1,8 @@
 #pragma once
 class Shader
 {
+	int id;
 public:
-	Shader();
-	~Shader();
+	Shader(const char* vertex, const char* fragment);
 };
 
