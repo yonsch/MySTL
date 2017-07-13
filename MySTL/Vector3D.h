@@ -1,6 +1,8 @@
 #ifndef Vector3D_H
 #define Vector3D_H
 #include <string>
+
+
 using namespace std;
 
 class Vector3D {
