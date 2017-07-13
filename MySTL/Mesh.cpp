@@ -2,15 +2,6 @@
 
 using namespace std;
 
-Mesh::Mesh()
-{
-}
-
-
-Mesh::~Mesh()
-{
-}
-
 Mesh::Mesh(float* data, int size) : size(size) {
 	glGenBuffers(1, &id);
 	glBindBuffer(GL_ARRAY_BUFFER, id);
