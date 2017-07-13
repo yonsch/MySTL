@@ -3,7 +3,7 @@
 #include "glew.h"
 #include <string>
 
-using namespcace std;
+using namespace std;
 
 int createShader(const string& shader, int type) {
 	int id = glCreateShader(type);
@@ -29,5 +29,7 @@ Shader::Shader(const string& vertex, const string& fragment) {
 	glDeleteShader(fragmentID);
 }
 
-Shader::bind() { glUseProgram(id); }
-Shader::unbind() { glUseProgram(0); }
+void Shader::bind() { glUseProgram(id); }
+void Shader::unbind() { glUseProgram(0); }
+
+Shader::Shader() {}

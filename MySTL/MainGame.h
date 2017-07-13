@@ -29,11 +29,13 @@ private:
 	int _screenHeight;
 	GameState _gameState;
 	
-	float data[] = { -1, -1, 0, 0, 1, 0, 1, -1, 0 };
-	Mesh mesh(data, 3);
-	
+	//float data[9] = { -1, -1, 0, 0, 1, 0, 1, -1, 0 };
+	//Mesh mesh(data, 3);
+	float data[9];
+	Mesh mesh;
+
 	std::string vertex = "in vec3 position;\nout vec3 pos;\nvoid main { pos = position; }";
-	std::string fragment = "in vec3 pos;\nout vec4 color;\n void main() { color = vec4(pos, 1.0); }");
-	Shader shader(vertex, fragment); 
+	std::string fragment = "in vec3 pos;\nout vec4 color;\n void main() { color = vec4(pos, 1.0); }";
+	Shader shader = Shader(vertex, fragment);
 };
 
