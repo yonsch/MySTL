@@ -2,16 +2,6 @@
 #include "SDL.h"
 #include "glew.h"
 
-
-Shader::Shader()
-{
-}
-
-
-Shader::~Shader()
-{
-}
-
 int createShader(const char* shader, int type) {
 	int id = glCreateShader(type);
 
