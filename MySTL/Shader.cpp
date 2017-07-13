@@ -1,17 +1,21 @@
 #include "Shader.h"
 #include "SDL.h"
 #include "glew.h"
+#include <string>
 
-int createShader(const char* shader, int type) {
+using namespcace std;
+
+int createShader(const string& shader, int type) {
 	int id = glCreateShader(type);
 
-	glShaderSource(id, shader);
+	const char *c_str = shader.c_str();
+	glShaderSource(id, 1, &c_str, NULL);
 	glCompileShader(id);
 
 	return id;
 }
 
-Shader::Shader(const char* vertex, const char* fragment) {
+Shader::Shader(string vertex, string fragment) {
 	int vertexID = createShader(vertex, GL_VERTEX_SHADER);
 	int fragmentID = createShader(fragment, GL_FRAGMENT_SHADER);
 
@@ -20,11 +24,6 @@ Shader::Shader(const char* vertex, const char* fragment) {
 
 	glLinkProgram(id);
 	glValidateProgram(id);
-
-	System.err.println(glGetProgramInfoLog(id));
-
-	uniforms = vs.getUniforms(id);
-	uniforms.putAll(fs.getUniforms(id));
 
 	glDeleteShader(vertexID);
 	glDeleteShader(fragmentID);
