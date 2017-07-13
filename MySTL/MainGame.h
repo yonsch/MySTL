@@ -32,8 +32,8 @@ private:
 	float data[9] = { -1, -1, 0, 0, 1, 0, 1, -1, 0 };
 	Mesh mesh;
 
-	std::string vertex = "in vec3 position;\nout vec3 pos;\nvoid main { pos = position; }";
-	std::string fragment = "in vec3 pos;\nout vec4 color;\n void main() { color = vec4(pos, 1.0); }";
+	std::string vertex = "in vec3 position;\nout vec3 pos;\nvoid main { gl_Position = vec4(position, 1.0); pos = position; }";
+	std::string fragment = "in vec3 pos;\n void main() { gl_FragColor = vec4(pos, 1.0); }";
 	Shader shader;
 };
 
