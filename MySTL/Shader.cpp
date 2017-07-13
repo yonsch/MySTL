@@ -27,6 +27,8 @@ Shader::Shader(const string& vertex, const string& fragment) {
 
 	glDeleteShader(vertexID);
 	glDeleteShader(fragmentID);
+	
+	glBindAttribLocation(id, 0, "position");
 }
 
 void Shader::bind() { glUseProgram(id); }
