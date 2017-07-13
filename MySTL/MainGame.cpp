@@ -47,6 +47,9 @@ void MainGame::initSystems() {
 	}
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	glClearColor(1.f, 1.f, 0.f, 1.f);
+	
+	mesh = Mesh(data, 3);
+	shader = Shader(vertex, fragment);
 }
 void MainGame::processInput() {
 	SDL_Event evnt;
