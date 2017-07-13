@@ -1,6 +1,8 @@
 #pragma once
 #include "SDL.h"
 #include "glew.h"
+#include "Mesh.h"
+#include "Shader.h"
 
 enum class GameState {PLAY, EXIT};
 
@@ -25,5 +27,9 @@ private:
 	int _screenWidth;
 	int _screenHeight;
 	GameState _gameState;
+	
+	float data[] = { -1, -1, 0, 0, 1, 0, 1, -1, 0 };
+	Mesh mesh(data);
+	Shader shader("in vec3 position;\nout vec3 pos;\nvoid main { pos = position; }", "in vec3 pos;\nout vec4 color;\n void main() { color = vec4(pos, 1.0); }");
 };
 
