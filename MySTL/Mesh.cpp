@@ -5,7 +5,7 @@ using namespace std;
 Mesh::Mesh(float* data, int size) : size(size) {
 	glGenBuffers(1, &id);
 	glBindBuffer(GL_ARRAY_BUFFER, id);
-	glBufferData(GL_ARRAY_BUFFER, size * sizeof(data[0]), data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, size * 3 * sizeof(data[0]), data, GL_STATIC_DRAW);
 }
 
 void Mesh::draw() {
