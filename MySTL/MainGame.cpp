@@ -68,16 +68,11 @@ void MainGame::gameLoop() {
 	}
 }
 void MainGame::drawGame() {
-	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glEnableClientState(GL_COLOR_ARRAY);
-	glBegin(GL_TRIANGLES);
-	glColor3f(1.f, 0.f, 0.f);
-	glVertex2f(0, 0);
-	glVertex2f(500, 0);
-	glVertex2f(500, 500);
-	glEnd();
+	shader.bind();
+	mesh.draw();
+	shader.unbind();
 
 	SDL_GL_SwapWindow(_window);
 
