@@ -1,13 +1,13 @@
 #pragma once
+
 #include <string>
 
 class Shader
 {
-	int id;
+	unsigned int id = 0;
 public:
-	Shader();
-	Shader(const string& vertex, const string& fragment);
+	inline Shader() {}
+	Shader(const std::string& vertex, const std::string& fragment);
 	void bind();
 	void unbind();
 };
-
