@@ -4,7 +4,7 @@ class Mesh
 {
 	unsigned int id, size;
 public:
-	Mesh() {}
+	inline Mesh() {}
 	Mesh(float* data, int size);
 	void draw();
 };
