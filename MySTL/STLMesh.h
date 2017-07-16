@@ -4,6 +4,7 @@
 #include <vector>
 #include "face.h"
 #include "vec3.h"
+#include "mesh.h"
 
 typedef unsigned char byte;
 
@@ -27,4 +28,5 @@ public:
 	static std::vector<Face> prism(std::vector<vec3>, vec3);
 	static std::vector<Face> revolve(std::vector<vec3>, float);
 	static std::vector<vec3> curve(float, float, int, bool, bool, float(*)(float));
+	explicit operator Mesh();
 };

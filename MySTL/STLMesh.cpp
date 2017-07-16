@@ -213,3 +213,21 @@ vector<vec3> STLMesh::curve(float start, float end, int res, bool closeStart, bo
 	}
 	return vecs;
 }
+
+STLMesh::operator Mesh() {
+	float* arr = new float[triCount * 9];
+	for (int i = 0; i < triCount; i++) {
+		arr[i * 9 + 0] = faces[i].v1.x;
+		arr[i * 9 + 1] = faces[i].v1.y;
+		arr[i * 9 + 2] = faces[i].v1.z;
+		arr[i * 9 + 3] = faces[i].v2.x;
+		arr[i * 9 + 4] = faces[i].v2.y;
+		arr[i * 9 + 5] = faces[i].v2.z;
+		arr[i * 9 + 6] = faces[i].v3.x;
+		arr[i * 9 + 7] = faces[i].v3.y;
+		arr[i * 9 + 8] = faces[i].v3.z;
+	}
+
+	Mesh m(arr, triCount * 9);
+	return m;
+}

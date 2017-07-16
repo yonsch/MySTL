@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <glew.h>
+#include "STLMesh.h"
 
 void fatalError(std::string errorString) {
 	std::cout << errorString << std::endl;
@@ -57,6 +58,10 @@ void Game::initSystems() {
 	projection = mat4::perspective(PI / 2, _screenWidth / _screenHeight, 0.1f, 1000);
 	camera *= mat4::translation(0, 0, -3);
 	camera = mat4(camera);
+
+	STLMesh m("pig.stl");
+	Mesh me = (Mesh)m;
+
 }
 void Game::processInput() {
 	SDL_Event evnt;
