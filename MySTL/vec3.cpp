@@ -1,67 +1,42 @@
-#include "Vector3D.h"
+#include "vec3.h"
 #include <iostream>
 
 using namespace std;
 
-Vector3D::Vector3D() :
-	x(0),
-	y(0),
-	z(0)
-{
+vec3& vec3::operator+=(const vec3& v) {
+	x += v.x;
+	y += v.y;
+	z += v.z;
 
+	return *this;
+}
+vec3& vec3::operator-=(const vec3& v) {
+	x -= v.x;
+	y -= v.y;
+	z -= v.z;
+
+	return *this;
 }
 
-Vector3D::~Vector3D() {
+vec3& vec3::operator*=(float f) {
+	x *= f;
+	y *= f;
+	z *= f;
 
+	return *this;
+}
+vec3& vec3::operator/=(float f) {
+	x /= f;
+	y /= f;
+	z /= f;
+
+	return *this;
 }
 
-Vector3D::Vector3D(float xCoord, float yCoord, float zCoord) :
-	x(xCoord),
-	y(yCoord),
-	z(zCoord)
-{
-
-}
-
-Vector3D::Vector3D(const Vector3D& v) :
-	x(v.x),
-	y(v.y),
-	z(v.z)
-{
-
-}
-
-Vector3D Vector3D::operator-(const Vector3D& rhs) {
-	Vector3D v;
-	v.x = x - rhs.x;
-	v.y = y - rhs.y;
-	v.z = z - rhs.z;
-	return v;
-}
-
-Vector3D Vector3D::operator+(const Vector3D& rhs) {
-	Vector3D v;
-	v.x = x + rhs.x;
-	v.y = y + rhs.y;
-	v.z = z + rhs.z;
-	return v;
-}
-Vector3D Vector3D::operator*(const float& rhs) {
-	Vector3D v;
-	v.x = x * rhs;
-	v.y = y * rhs;
-	v.z = z * rhs;
-	return v;
-}
-Vector3D Vector3D::operator/(const float& rhs) {
-	Vector3D v;
-	v.x = x / rhs;
-	v.y = y / rhs;
-	v.z = z / rhs;
-	return v;
-}
-
-ostream& operator<<(ostream& strm, const Vector3D &a) {
-	strm << "(" << a.x << "," << a.y << "," << a.z << ")";
-	return strm;
+vec3 cross(const vec3& l, const vec3& r) {
+	return vec3(
+		l.y * r.z - l.z * r.y,
+		l.z * r.x - l.x * r.z,
+		l.x * r.y - l.y * r.x
+	);
 }

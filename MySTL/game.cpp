@@ -1,4 +1,4 @@
-#include "MainGame.h"
+#include "game.h"
 #include <iostream>
 #include <string>
 #include <glew.h>
@@ -11,7 +11,7 @@ void fatalError(std::string errorString) {
 	SDL_Quit();
 }
 
-MainGame::MainGame()
+Game::Game()
 {
 	_window = nullptr;
 	_screenHeight = 768;
@@ -21,16 +21,16 @@ MainGame::MainGame()
 }
 
 
-MainGame::~MainGame()
+Game::~Game()
 {
 }
 
-void MainGame::run() {
+void Game::run() {
 	initSystems();
 	gameLoop();
 }
 
-void MainGame::initSystems() {
+void Game::initSystems() {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	_window = SDL_CreateWindow("sdf",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screenWidth, _screenHeight,SDL_WINDOW_OPENGL);
 	if (_window == nullptr) {
@@ -52,7 +52,7 @@ void MainGame::initSystems() {
 	mesh = Mesh(data, 3);
 	shader = Shader(vertex, fragment);
 }
-void MainGame::processInput() {
+void Game::processInput() {
 	SDL_Event evnt;
 
 	while (SDL_PollEvent(&evnt)) {
@@ -65,13 +65,13 @@ void MainGame::processInput() {
 		}
 	}
 }
-void MainGame::gameLoop() {
+void Game::gameLoop() {
 	while (_gameState != GameState::EXIT) {
 		processInput();
 		drawGame();
 	}
 }
-void MainGame::drawGame() {
+void Game::drawGame() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	shader.bind();

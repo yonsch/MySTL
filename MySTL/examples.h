@@ -2,7 +2,7 @@
 #define Examples_H
 
 #include <vector>
-#include "Vector3D.h"
+#include "vec3.h"
 #include "STLMesh.h"
 
 void makePyramid();

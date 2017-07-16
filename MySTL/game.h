@@ -7,7 +7,7 @@
 
 enum class GameState { PLAY, EXIT };
 
-class MainGame
+class Game
 {
 	void initSystems();
 	void gameLoop();
@@ -27,8 +27,8 @@ class MainGame
 	Shader shader;
 
 public:
-	MainGame();
-	~MainGame();
+	Game();
+	~Game();
 
 	void run();
 };

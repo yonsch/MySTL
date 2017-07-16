@@ -1,25 +1,21 @@
-#ifndef Face_H
-#define Face_H
+#pragma once
 
 #include <vector>
-#include "Vector3D.h"
+#include "vec3.h"
 
-class Face {
+class Face 
+{
 public:
-	Vector3D v1;
-	Vector3D v2;
-	Vector3D v3;
-	Vector3D n;
+	vec3 v1, v2, v3, n;
 
-	Face();
-	Face(Vector3D v1, Vector3D v2, Vector3D v3,Vector3D n);
-	Face(Vector3D v1, Vector3D v2, Vector3D v3);
-	string toString();
-	vector<float> getFloats();
-
-	Face operator* (const float& rhs);
+	inline Face() {}
+	inline Face(vec3 v1, vec3 v2, vec3 v3,vec3 n) : v1(v1), v2(v2), v3(v3), n(n) {}
+	Face(vec3 v1, vec3 v2, vec3 v3);
+	
+	//std::vector<float> getFloats(); |
+	//reimplemented this using a cast V
+	explicit operator std::vector<float>() const;
+	inline Face operator*(const float& scale) const { return Face(v1 * scale, v2 * scale, v3 * scale, n); }
 };
 
-std::ostream& operator<<(ostream& strm, const Face &a);
-
-#endif
+extern std::ostream& operator<<(std::ostream& strm, const Face &a);

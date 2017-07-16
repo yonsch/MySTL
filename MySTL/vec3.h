@@ -1,34 +1,44 @@
-#ifndef Vector3D_H
-#define Vector3D_H
-#include <string>
+#pragma once
 
+#include <iostream>
 
-using namespace std;
+struct vec3 
+{
+	float x, y, z;
 
-class Vector3D {
+	inline vec3() {}
 
-public:
-	float x;
-	float y;
-	float z;
+	inline vec3(float x, float y, float z) : x(x), y(y), z(z) {}
+	inline vec3(float all) : vec3(all, all, all) {}
+	inline vec3(const vec3& copy) : vec3(copy.x, copy.y, copy.z) {}
 
-	Vector3D();
-	~Vector3D();
-
-	Vector3D(float xCoord, float yCoord, float zCoord);
-	Vector3D(const Vector3D& v);
-	Vector3D operator- (const Vector3D& rhs);
-	Vector3D operator+ (const Vector3D& rhs);
-	Vector3D operator* (const float& rhs);
-	Vector3D operator/ (const float& rhs);
-
+	// might wanna implement vector operator* (not a mathematical opertion, but can be useful)
+	inline vec3 operator+(const vec3& v) const { return vec3(x + v.x, y + v.y, z + v.z); }
+	inline vec3 operator-(const vec3& v) const { return vec3(x - v.x, y - v.y, z - v.z); }
 	
-	string toString();
+	// same with float operator+
+	inline vec3 operator*(float f) const { return vec3(x * f, y * f, z * f); }
+	inline vec3 operator/(float f) const { return vec3(x / f, y / f, z / f); }
 
-private:
-
+	// implemented in source file
+	vec3& operator+=(const vec3& v);
+	vec3& operator-=(const vec3& v);
+	vec3& operator*=(float f);
+	vec3& operator/=(float f);
 };
 
-std::ostream& operator<<(ostream& strm, const Vector3D &a);
+// vector negation
+inline vec3 operator-(const vec3& v) { return v * -1; }
 
-#endif
+inline std::ostream& operator<<(std::ostream& strm, const vec3 &v) {
+	return strm  << "(" << v.x << "," << v.y << "," << v.z << ")";
+}
+
+inline float length(const vec3& v) { return std::sqrt(v.x * v.x + v.y * v.y + v.z * v.z); }
+
+inline vec3 normalize(const vec3& v) { return v / length(v); }
+
+inline float dot(const vec3& l, const vec3& r) { return l.x * r.x + l.y * r.y + l.z * r.z; }
+
+//implemented in source file
+vec3 cross(const vec3& l, const vec3& r);

@@ -1,133 +1,83 @@
-#include <string>
-#include <vector>
 #include "STLMesh.h"
 #include <fstream>
 #include <iterator>
-#include <vector>
-#include "iostream"
-#include <math.h>
+#include <iostream>
 
 using namespace std;
 
-STLMesh::STLMesh() {
-	header = "";
-	triCount = 0;
-	vector<Face> faces;
-}
-
-STLMesh::~STLMesh() {
-
-}
-
-STLMesh::STLMesh(vector<Face> f, string h) {
-	header = h;
-	faces = f;
-	triCount = f.size();
+float readFloat(byte* b) {
+	float result;
+	memcpy(&result, b, sizeof(result));
+	return result;
 }
 
 STLMesh::STLMesh(string p) {
-
 	//copies file to buffer
 	ifstream input(p, ios::binary);
-	vector<char> buffer((istreambuf_iterator<char>(input)),(istreambuf_iterator<char>()));
+	vector<byte> buffer((istreambuf_iterator<char>(input)),(istreambuf_iterator<char>()));
 
 	//read header of file
 	for (int i = 0; i < 80; i++) {
 		header += buffer[i];
 	}
 
-
 	//read triangle count from file
-	triCount = int((unsigned char)(buffer[80])|
-		(unsigned char)(buffer[81]) << 8 |
-		(unsigned char)(buffer[82]) << 16 |
-		(unsigned char)(buffer[83]) <<24);
-
+	memcpy(&triCount, &buffer[80], sizeof(triCount));
 	
 	//read triangles
 	for (int i = 0; i < triCount; i++) {
 		int p = 84 + i * 50;
-		Vector3D n = Vector3D(btof(buffer[p], buffer[p + 1], buffer[p + 2], buffer[p + 3]),
-			btof(buffer[p + 4], buffer[p + 5], buffer[p + 6], buffer[p + 7]),
-			btof(buffer[p + 8], buffer[p + 9], buffer[p + 10], buffer[p + 11]));
+
+		vec3 n(readFloat(&buffer[p]), readFloat(&buffer[p + 4]), readFloat(&buffer[p + 8]));
 		p += 12;
-		Vector3D v1 = Vector3D(btof(buffer[p], buffer[p + 1], buffer[p + 2], buffer[p + 3]),
-			btof(buffer[p + 4], buffer[p + 5], buffer[p + 6], buffer[p + 7]),
-			btof(buffer[p + 8], buffer[p + 9], buffer[p + 10], buffer[p + 11]));
+		vec3 v1(readFloat(&buffer[p]), readFloat(&buffer[p + 4]), readFloat(&buffer[p + 8]));
 		p += 12;
-		Vector3D v2 = Vector3D(btof(buffer[p], buffer[p + 1], buffer[p + 2], buffer[p + 3]),
-			btof(buffer[p + 4], buffer[p + 5], buffer[p + 6], buffer[p + 7]),
-			btof(buffer[p + 8], buffer[p + 9], buffer[p + 10], buffer[p + 11]));
+		vec3 v2(readFloat(&buffer[p]), readFloat(&buffer[p + 4]), readFloat(&buffer[p + 8]));
 		p += 12;
-		Vector3D v3 = Vector3D(btof(buffer[p], buffer[p + 1], buffer[p + 2], buffer[p + 3]), 
-			btof(buffer[p + 4], buffer[p + 5], buffer[p + 6], buffer[p + 7]), 
-			btof(buffer[p + 8], buffer[p + 9], buffer[p + 10], buffer[p + 11]));
-		
-		
-		Face f = Face(v1, v2, v3, n);
+		vec3 v3(readFloat(&buffer[p]), readFloat(&buffer[p + 4]), readFloat(&buffer[p + 8]));
+	
+		Face f(v1, v2, v3, n);
 		faces.push_back(f);
 	}
 }
 
-float STLMesh::btof(unsigned char b0, unsigned char b1, unsigned char b2, unsigned char b3)
-{
-	unsigned char b[] = { b0, b1, b2, b3 };
-	float result;
-	memcpy(&result, &b, sizeof(result));
-	return result;
-}
-
-unsigned char * STLMesh::writeFloat(float f) {
-		unsigned char b[4] = {};
-		memcpy(&b, &f, sizeof(f));
-		return b;
-}
-
-
-
-void STLMesh::toFile(string path) {
+void STLMesh::toFile(string path) const {
 	ofstream output(path, ios::binary);
 
 	//write header
 	output << header;
-	unsigned char z = 0;
+	byte z = 0;
 	for (int i = 0; i < 80 - header.size(); i++) {
 		output << z;
 	}
 
 	//write tri count
 	for (int i = 0; i < 4; i++) 
-		output << (unsigned char) (triCount >> (i * 8));
+		output << (byte) (triCount >> (i * 8));
 
 	//write each face
 	for (int i = 0; i < triCount; i++) {
 		Face fac = faces[i];
-		vector<float> v = fac.getFloats();
+		vector<float> v = (vector<float>) fac;
 		for (int j = 0; j < 12; j++) {
 			float f = v[j];
 			output.write( (char *)&f, sizeof(float));
 		}
-		output << (unsigned char) 0 << (unsigned char) 0;
+		output << (byte) 0 << (byte) 0;
 	}
 }
 
-STLMesh STLMesh::operator*(const float& rhs) {
-	STLMesh m;
-	vector<Face> newFaces;
-	for (int i = 0; i < faces.size(); i++) {
-		newFaces.push_back(faces[i] * rhs);
+STLMesh STLMesh::operator*(const float& scale) {
+	vector<Face> newFaces(faces.size());
+	for (unsigned int i = 0; i < faces.size(); i++) {
+		newFaces[i] = faces[i] * scale;
 	}
-	m.faces = newFaces;
-	m.triCount = triCount;
-	m.header = header;
-	return m;
+
+	return STLMesh(newFaces, header);
 }
 
 
-
-
-
-vector<Face> STLMesh::pyramid(vector<Vector3D> v) {
+vector<Face> STLMesh::pyramid(vector<vec3> v) {
 	vector<Face> faces;
 	faces.push_back(Face(v[0], v[1], v[2]));
 	faces.push_back(Face(v[3], v[1], v[0]));
@@ -136,15 +86,20 @@ vector<Face> STLMesh::pyramid(vector<Vector3D> v) {
 	return faces;
 }
 
+bool goodAngle(vec3 i, vec3 j, vec3 k) {
+	vec3 a = k - j;
+	vec3 b = i - j;
+	return cross(a, b).z < 0;
+}
 
-vector<Face> STLMesh::prism(vector<Vector3D> layer, Vector3D h) {
+vector<Face> STLMesh::prism(vector<vec3> layer, vec3 h) {
 
 	vector<Face> faces;
 
 	//create vertices:
 	
-	vector<Vector3D> copies;
-	Vector3D v;
+	vector<vec3> copies;
+	vec3 v;
 	for (int i = 0; i < layer.size(); i++) {
 		copies.push_back(layer[i]+h);
 	}
@@ -154,14 +109,14 @@ vector<Face> STLMesh::prism(vector<Vector3D> layer, Vector3D h) {
 	//two layers:
 	Face f;
 
-	vector<Vector3D> copyOfLayer = layer;
-	vector<Vector3D> copyOfCopies = copies;
+	vector<vec3> copyOfLayer = layer;
+	vector<vec3> copyOfCopies = copies;
 
 	//goodAngle is defined on the bottom of this file
 	
-	Vector3D a;
-	Vector3D b;
-	Vector3D c;
+	vec3 a;
+	vec3 b;
+	vec3 c;
 	int index = 0;
 	while (copyOfLayer.size() > 3) {
 		a = copyOfLayer[index % copyOfLayer.size()];
@@ -211,25 +166,16 @@ vector<Face> STLMesh::prism(vector<Vector3D> layer, Vector3D h) {
 	return faces;
 }
 
-bool STLMesh::goodAngle(Vector3D i, Vector3D j, Vector3D k) {
-	Vector3D a = k - j;
-	Vector3D b = i - j;
-	float z = a.x*b.y - a.y*b.x;
-	float sizeA = sqrt(a.x*a.x+a.y*a.y+a.z*a.z);
-	float sizeB = sqrt(b.x*b.x + b.y*b.y + b.z*b.z);
-	return  (z / (sizeA*sizeB)) < 0;
-}
-
-vector<Face> STLMesh::revolve(vector<Vector3D> vecs, float res) {
+vector<Face> STLMesh::revolve(vector<vec3> vecs, float res) {
 	float PI = 3.14159265359;
-	vector<vector<Vector3D>> vertices;
+	vector<vector<vec3>> vertices;
 
 	//create point cloud
 	for (int layer = 0; layer < vecs.size(); layer++) {
-		vector<Vector3D> v;
+		vector<vec3> v;
 		vertices.push_back(v);
 		for (int i = 0; i < res; i++) {
-			vertices[layer].push_back(Vector3D(vecs[layer].x * cos(2 * i*PI / res), vecs[layer].x * sin(2 * i * PI / res), vecs[layer].z));
+			vertices[layer].push_back(vec3(vecs[layer].x * cos(2 * i*PI / res), vecs[layer].x * sin(2 * i * PI / res), vecs[layer].z));
 		}
 	}
 
@@ -249,21 +195,21 @@ vector<Face> STLMesh::revolve(vector<Vector3D> vecs, float res) {
 	return faces;
 }
 
-vector<Vector3D> STLMesh::curve(float start, float end, int res, bool closeStart, bool closeEnd, float(*function)(float)) {
+vector<vec3> STLMesh::curve(float start, float end, int res, bool closeStart, bool closeEnd, float(*function)(float)) {
 	float delta = (end - start) / res;
 	float x;
 	float z;
-	vector<Vector3D> vecs;
+	vector<vec3> vecs;
 	if (closeStart) {
-		vecs.push_back(Vector3D(0, 0, start));
+		vecs.push_back(vec3(0, 0, start));
 	}
 	for (int i = 0; i < res; i++) {
 		x = start + delta*(float)i;
 		z = function(x);
-		vecs.push_back(Vector3D(z, 0, x));
+		vecs.push_back(vec3(z, 0, x));
 	}
 	if (closeEnd) {
-		vecs.push_back(Vector3D(0, 0, end - delta));
+		vecs.push_back(vec3(0, 0, end - delta));
 	}
 	return vecs;
 }

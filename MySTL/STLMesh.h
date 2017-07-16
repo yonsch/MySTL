@@ -1,39 +1,30 @@
-#ifndef STLMesh_H
-#define STLMesh_H
+#pragma once
+
 #include <string>
 #include <vector>
-#include "Face.h"
+#include "face.h"
+#include "vec3.h"
 
-using namespace std;
+typedef unsigned char byte;
 
-class STLMesh {
-
+class STLMesh
+{
 public:
-	string header;
+	std::string header;
 	int triCount;
-	vector<Face> faces;
+	std::vector<Face> faces;
 
-	STLMesh();
-	~STLMesh();
+	inline STLMesh() {}
+	inline STLMesh(std::vector<Face> f, std::string h) : header(h), faces(f), triCount(f.size()) {}
 
-	STLMesh(string);
-	STLMesh(vector<Face>,string);
+	STLMesh(std::string fileName);
 
-	float btof(unsigned char, unsigned char, unsigned char, unsigned char);
-	void toFile(string);
-	unsigned char * STLMesh::writeFloat(float);
+	void toFile(std::string fileName) const;
 
-	STLMesh operator* (const float& rhs);
+	STLMesh operator* (const float& scale);
 
-	
-	static vector<Face> pyramid(vector<Vector3D>);
-	static vector<Face> prism(vector<Vector3D>, Vector3D);
-	static vector<Face> revolve(vector<Vector3D>,float);
-	static vector<Vector3D> curve(float, float, int, bool, bool, float(*)(float));
-	static bool goodAngle(Vector3D, Vector3D, Vector3D);
-
-private:
-
+	static std::vector<Face> pyramid(std::vector<vec3>);
+	static std::vector<Face> prism(std::vector<vec3>, vec3);
+	static std::vector<Face> revolve(std::vector<vec3>, float);
+	static std::vector<vec3> curve(float, float, int, bool, bool, float(*)(float));
 };
-
-#endif

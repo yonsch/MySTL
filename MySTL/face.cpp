@@ -1,40 +1,18 @@
 #include "Face.h"
 #include <iostream>
-#include <math.h>
+
 using namespace std;
 
-Face::Face() {
-	Vector3D v;
-	v1 = v;
-	v2 = v;
-	v3 = v;
+Face::Face(vec3 v1, vec3 v2, vec3 v3) : v1(v1), v2(v2), v3(v3) {
+	vec3 u = v2 - v1, v = v3 - v1;
+	n = normalize(cross(u, v));
 }
 
-Face::Face(Vector3D p1, Vector3D p2, Vector3D p3, Vector3D no) {
-	v1 = p1;
-	v2 = p2;
-	v3 = p3;
-	n = no;
+extern ostream& operator<<(ostream& strm, const Face &f) {
+	return strm << "<" << f.n << "," << f.v1 << "," << f.v2 << "," << f.v3 << ">";
 }
 
-Face::Face(Vector3D p1, Vector3D p2, Vector3D p3) {
-	v1 = p1;
-	v2 = p2;
-	v3 = p3;
-	Vector3D u = p2 - p1;
-	Vector3D v = p3 - p1;
-	float x = u.y * v.z - u.z * v.y;
-	float y = u.z * v.x - u.x * v.z;
-	float z = u.x * v.y - u.y * v.x;
-	float d = sqrt(x*x + y*y + z*z);
-	n = Vector3D(x/d,y/d,z/d);
-}
-
-ostream& operator<<(ostream& strm, const Face &a) {
-	strm << "<" << a.n << "," << a.v1 << "," << a.v2 << "," << a.v3 << ">";
-	return strm;
-}
-
+/*
 vector<float> Face::getFloats() {
 	vector<float> arr(12);
 	arr[0] = n.x;
@@ -52,13 +30,22 @@ vector<float> Face::getFloats() {
 	
 	return arr;
 }
+*/
 
+Face::operator vector<float>() const {
+	vector<float> v(12);
+	v[0] = n.x;
+	v[1] = n.y;
+	v[2] = n.z;
+	v[3] = v1.x;
+	v[4] = v1.y;
+	v[5] = v1.z;
+	v[6] = v2.x;
+	v[7] = v2.y;
+	v[8] = v2.z;
+	v[9] = v3.x;
+	v[10] = v3.y;
+	v[11] = v3.z;
 
-Face Face::operator*(const float& rhs) {
-	Face f;
-	f.v1 = v1*rhs;
-	f.v2 = v2*rhs;
-	f.v3 = v3*rhs;
-	f.n = n;	
-	return f;
+	return v;
 }
