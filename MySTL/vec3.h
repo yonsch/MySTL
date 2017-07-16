@@ -20,6 +20,8 @@ struct vec3
 	// same with float operator+
 	inline vec3 operator*(float f) const { return vec3(x * f, y * f, z * f); }
 	inline vec3 operator/(float f) const { return vec3(x / f, y / f, z / f); }
+	inline vec3 operator*(const vec3& v) const { return vec3(x * v.x, y * v.y, z * v.z); }
+	inline vec3 operator/(const vec3& v) const { return vec3(x / v.x, y / v.y, z / v.z); }
 
 	// implemented in source file
 	vec3& operator+=(const vec3& v);

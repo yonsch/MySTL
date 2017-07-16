@@ -2,7 +2,7 @@
 
 quaternion::quaternion(const vec3& axis, float angle) {
 	float sin = std::sin(angle / 2);
-
+	
 	x = axis.x * sin;
 	y = axis.y * sin;
 	z = axis.z * sin;
@@ -53,10 +53,10 @@ quaternion quaternion::operator*(const quaternion& r) const {
 }
 quaternion quaternion::operator*(const vec3& r) const {
 	return quaternion(
-		w * r.z + x * r.y - y * r.x,
-		-x * r.x - y * r.y - z * r.z,
 		w * r.x + y * r.z - z * r.y,
-		w * r.y + z * r.x - x * r.z
+		w * r.y + z * r.x - x * r.z,
+		w * r.z + x * r.y - y * r.x,
+		- x * r.x - y * r.y - z * r.z
 	);
 }
 
@@ -150,8 +150,8 @@ quaternion sLerp(const quaternion& q, const quaternion& r, float factor, bool sh
 	return quaternion(q * srcFactor + corrected * destFactor);
 }
 
-quaternion::operator vec3() { return vec3(x, y, z); }
-quaternion::operator mat4() { return mat4::rotation(*this); }
+quaternion::operator vec3() const { return vec3(x, y, z); }
+quaternion::operator mat4() const { return mat4::rotation(*this); }
 
 vec3 quaternion::getRight() { return vec3::RIGHT.rotate(*this); }
 vec3 quaternion::getLeft() { return vec3::LEFT.rotate(*this); }

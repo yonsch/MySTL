@@ -99,6 +99,7 @@
     <ClInclude Include="include\SDL_video.h" />
     <ClInclude Include="include\wglew.h" />
     <ClInclude Include="math3d.h" />
+    <ClInclude Include="transform.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="glew32.dll" />

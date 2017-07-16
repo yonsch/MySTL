@@ -33,7 +33,7 @@ void Game::run() {
 
 void Game::initSystems() {
 	SDL_Init(SDL_INIT_EVERYTHING);
-	_window = SDL_CreateWindow("sdf", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screenWidth, _screenHeight, SDL_WINDOW_OPENGL);
+	_window = SDL_CreateWindow("Yonsch's Stupid Mess", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screenWidth, _screenHeight, SDL_WINDOW_OPENGL);
 	if (_window == nullptr) {
 		fatalError("window bla bla");
 	}
@@ -49,33 +49,60 @@ void Game::initSystems() {
 	}
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	glClearColor(1.f, 1.f, 0.f, 1.f);
-	glDisable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CW);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
 
-	mesh = Mesh(data, 12);
+	mesh = (Mesh) pig;
 	shader = Shader(vertex, fragment);
 
 	float PI = 3.14159265359f;
-	projection = mat4::perspective(PI / 2, _screenWidth / _screenHeight, 0.1f, 1000);
-	camera *= mat4::translation(0, 0, -3);
-	camera = mat4(camera);
-
-	STLMesh m("pig.stl");
-	Mesh me = (Mesh)m;
-
+	projection = mat4::perspective(PI / 2, (float)_screenWidth / _screenHeight, 0.1f, 1000);
+	transform.move(0, -2, -5).rotate(vec3::LEFT, PI/2).rotate(vec3::UP, PI/2);
 }
+
 void Game::processInput() {
 	SDL_Event evnt;
 
 	while (SDL_PollEvent(&evnt)) {
 		switch (evnt.type) {
+		case SDL_KEYDOWN:
+			switch (evnt.button.button)
+			{
+				//TODO: fix the goddamn camera
+			case SDL_SCANCODE_W:
+				camera.move(-camera.rot.getForward());
+				break;
+			case SDL_SCANCODE_A:
+				camera.move(-camera.rot.getLeft());
+				break;
+			case SDL_SCANCODE_S:
+				camera.move(-camera.rot.getBack());
+				break;
+			case SDL_SCANCODE_D:
+				camera.move(-camera.rot.getRight());
+				break;
+			case SDL_SCANCODE_SPACE:
+				camera.move(0, 1, 0);
+				break;
+			case SDL_SCANCODE_LSHIFT:
+				camera.move(0, -1, 0);
+				break;
+			case SDL_SCANCODE_ESCAPE:
+				_gameState = GameState::EXIT;
+			}
+			break;
 		case SDL_QUIT:
 			_gameState = GameState::EXIT;
 			break;
 		case SDL_MOUSEMOTION:
-			camera *= mat4::rotation(vec3::UP, evnt.motion.x / 1000.f);
-			camera *= mat4::rotation(vec3::RIGHT, evnt.motion.y / 1000.f);
-			std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
+			if (!captureMouse) break;
+			camera.rotate(vec3::UP, (float)evnt.motion.xrel / 100);
+			camera.rotate(camera.rot.getRight(), (float)-evnt.motion.yrel / 100);
 			break;
+		case SDL_MOUSEBUTTONDOWN:
+			SDL_SetRelativeMouseMode((captureMouse = !captureMouse) ? SDL_TRUE : SDL_FALSE);
 		}
 	}
 }
@@ -89,7 +116,9 @@ void Game::drawGame() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	shader.bind();
-	//shader.loadUniform("mvp", transform);
+	shader.loadUniform("mvp", (mat4)projection * ((mat4)camera * transform));
+	vec3 d = camera.rot.getForward();
+	glClearColor(d.x, d.y, d.z, 1);
 	mesh.draw();
 	shader.unbind();
 

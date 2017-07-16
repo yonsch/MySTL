@@ -31,8 +31,8 @@ public:
 	quaternion& operator*=(const quaternion& r);
 	quaternion& operator*=(const vec3& r);
 
-	explicit operator vec3();
-	explicit operator mat4();
+	explicit operator vec3() const;
+	explicit operator mat4() const;
 
 	vec3 getRight();
 	vec3 getLeft();

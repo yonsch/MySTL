@@ -228,6 +228,5 @@ STLMesh::operator Mesh() {
 		arr[i * 9 + 8] = faces[i].v3.z;
 	}
 
-	Mesh m(arr, triCount * 9);
-	return m;
+	return Mesh(arr, triCount * 3);
 }

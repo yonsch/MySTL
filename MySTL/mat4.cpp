@@ -108,7 +108,7 @@ ostream& operator<<(ostream& strm, const mat4 &m) {
 }
 
 mat4 mat4::perspective(float fov, float ar, float near, float far) {
-	float* m = new float[16];
+	float* m = new float[16] { 0 };
 	float tan = std::tan(fov / 2);
 	float range = near - far;
 
