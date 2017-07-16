@@ -1,5 +1,5 @@
 #include "mesh.h"
-#include <glew.h>
+#include <glew/glew.h>
 
 using namespace std;
 

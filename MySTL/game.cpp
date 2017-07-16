@@ -1,7 +1,7 @@
 #include "game.h"
 #include <iostream>
 #include <string>
-#include <glew.h>
+#include <glew/glew.h>
 
 void fatalError(std::string errorString) {
 	std::cout << errorString << std::endl;
@@ -15,7 +15,7 @@ Game::Game()
 {
 	_window = nullptr;
 	_screenHeight = 768;
-	
+
 	_screenWidth = 1024;
 	_gameState = GameState::PLAY;
 }
@@ -32,7 +32,7 @@ void Game::run() {
 
 void Game::initSystems() {
 	SDL_Init(SDL_INIT_EVERYTHING);
-	_window = SDL_CreateWindow("sdf",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screenWidth, _screenHeight,SDL_WINDOW_OPENGL);
+	_window = SDL_CreateWindow("sdf", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screenWidth, _screenHeight, SDL_WINDOW_OPENGL);
 	if (_window == nullptr) {
 		fatalError("window bla bla");
 	}
@@ -48,7 +48,7 @@ void Game::initSystems() {
 	}
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	glClearColor(1.f, 1.f, 0.f, 1.f);
-	
+
 	mesh = Mesh(data, 3);
 	shader = Shader(vertex, fragment);
 }
@@ -61,7 +61,7 @@ void Game::processInput() {
 			_gameState = GameState::EXIT;
 			break;
 		case SDL_MOUSEMOTION:
-			std::cout << evnt.motion.x << " " << evnt.motion.y <<std::endl;
+			std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
 		}
 	}
 }

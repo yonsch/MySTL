@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-struct vec3 
+struct vec3
 {
 	float x, y, z;
 
@@ -15,7 +15,7 @@ struct vec3
 	// might wanna implement vector operator* (not a mathematical opertion, but can be useful)
 	inline vec3 operator+(const vec3& v) const { return vec3(x + v.x, y + v.y, z + v.z); }
 	inline vec3 operator-(const vec3& v) const { return vec3(x - v.x, y - v.y, z - v.z); }
-	
+
 	// same with float operator+
 	inline vec3 operator*(float f) const { return vec3(x * f, y * f, z * f); }
 	inline vec3 operator/(float f) const { return vec3(x / f, y / f, z / f); }
@@ -31,7 +31,7 @@ struct vec3
 inline vec3 operator-(const vec3& v) { return v * -1; }
 
 inline std::ostream& operator<<(std::ostream& strm, const vec3 &v) {
-	return strm  << "(" << v.x << "," << v.y << "," << v.z << ")";
+	return strm << "(" << v.x << "," << v.y << "," << v.z << ")";
 }
 
 inline float length(const vec3& v) { return std::sqrt(v.x * v.x + v.y * v.y + v.z * v.z); }

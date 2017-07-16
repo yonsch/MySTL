@@ -1,5 +1,5 @@
 #include "shader.h"
-#include <glew.h>
+#include <glew/glew.h>
 #include <iostream>
 #include <vector>
 
@@ -58,4 +58,3 @@ Shader::Shader(const string& vertex, const string& fragment) {
 
 void Shader::bind() { glUseProgram(id); }
 void Shader::unbind() { glUseProgram(0); }
-

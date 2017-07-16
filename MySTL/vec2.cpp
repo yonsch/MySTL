@@ -30,5 +30,5 @@ vec2& vec2::operator/=(float f) {
 
 vec2 rotate(const vec2& v, float angle) {
 	float sin = std::sin(angle), cos = std::cos(angle);
-	return vec2(cos * v.x - sin * v.y,  sin * v.x + cos * v.y);
+	return vec2(cos * v.x - sin * v.y, sin * v.x + cos * v.y);
 }

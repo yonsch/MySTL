@@ -14,7 +14,7 @@ float readFloat(byte* b) {
 STLMesh::STLMesh(string p) {
 	//copies file to buffer
 	ifstream input(p, ios::binary);
-	vector<byte> buffer((istreambuf_iterator<char>(input)),(istreambuf_iterator<char>()));
+	vector<byte> buffer((istreambuf_iterator<char>(input)), (istreambuf_iterator<char>()));
 
 	//read header of file
 	for (int i = 0; i < 80; i++) {
@@ -23,7 +23,7 @@ STLMesh::STLMesh(string p) {
 
 	//read triangle count from file
 	memcpy(&triCount, &buffer[80], sizeof(triCount));
-	
+
 	//read triangles
 	for (int i = 0; i < triCount; i++) {
 		int p = 84 + i * 50;
@@ -35,7 +35,7 @@ STLMesh::STLMesh(string p) {
 		vec3 v2(readFloat(&buffer[p]), readFloat(&buffer[p + 4]), readFloat(&buffer[p + 8]));
 		p += 12;
 		vec3 v3(readFloat(&buffer[p]), readFloat(&buffer[p + 4]), readFloat(&buffer[p + 8]));
-	
+
 		Face f(v1, v2, v3, n);
 		faces.push_back(f);
 	}
@@ -52,8 +52,8 @@ void STLMesh::toFile(string path) const {
 	}
 
 	//write tri count
-	for (int i = 0; i < 4; i++) 
-		output << (byte) (triCount >> (i * 8));
+	for (int i = 0; i < 4; i++)
+		output << (byte)(triCount >> (i * 8));
 
 	//write each face
 	for (int i = 0; i < triCount; i++) {
@@ -61,9 +61,9 @@ void STLMesh::toFile(string path) const {
 		vector<float> v = (vector<float>) fac;
 		for (int j = 0; j < 12; j++) {
 			float f = v[j];
-			output.write( (char *)&f, sizeof(float));
+			output.write((char *)&f, sizeof(float));
 		}
-		output << (byte) 0 << (byte) 0;
+		output << (byte)0 << (byte)0;
 	}
 }
 
@@ -97,11 +97,11 @@ vector<Face> STLMesh::prism(vector<vec3> layer, vec3 h) {
 	vector<Face> faces;
 
 	//create vertices:
-	
+
 	vector<vec3> copies;
 	vec3 v;
 	for (int i = 0; i < layer.size(); i++) {
-		copies.push_back(layer[i]+h);
+		copies.push_back(layer[i] + h);
 	}
 
 	//create faces:
@@ -113,19 +113,19 @@ vector<Face> STLMesh::prism(vector<vec3> layer, vec3 h) {
 	vector<vec3> copyOfCopies = copies;
 
 	//goodAngle is defined on the bottom of this file
-	
+
 	vec3 a;
 	vec3 b;
 	vec3 c;
 	int index = 0;
 	while (copyOfLayer.size() > 3) {
 		a = copyOfLayer[index % copyOfLayer.size()];
-		b = copyOfLayer[(index+1) % copyOfLayer.size()];
-		c = copyOfLayer[(index+2) % copyOfLayer.size()];
-		if (goodAngle(a,b,c)) {
+		b = copyOfLayer[(index + 1) % copyOfLayer.size()];
+		c = copyOfLayer[(index + 2) % copyOfLayer.size()];
+		if (goodAngle(a, b, c)) {
 			copyOfLayer.erase(copyOfLayer.begin() + (index + 1) % copyOfLayer.size());
 			index++;
-			faces.push_back(Face(a,b,c));
+			faces.push_back(Face(a, b, c));
 		}
 		else {
 			index++;
@@ -143,7 +143,7 @@ vector<Face> STLMesh::prism(vector<vec3> layer, vec3 h) {
 			copyOfCopies.erase(copyOfCopies.begin() + (index + 1) % copyOfCopies.size());
 			index++;
 			faces.push_back(Face(a, b, c));
-			
+
 
 		}
 		else {
@@ -152,15 +152,15 @@ vector<Face> STLMesh::prism(vector<vec3> layer, vec3 h) {
 	}
 	faces.push_back(Face(copyOfCopies[0], copyOfCopies[1], copyOfCopies[2]));
 
-	
+
 
 	//sides:
 
 	int size = layer.size();
 	for (int i = 0; i < size; i++) {
-		f = Face(layer[i], copies[i], layer[(i + 1)%size]);
+		f = Face(layer[i], copies[i], layer[(i + 1) % size]);
 		faces.push_back(f);
-		f = Face(layer[(i+1)%size], copies[(i+1)%size], copies[i]);
+		f = Face(layer[(i + 1) % size], copies[(i + 1) % size], copies[i]);
 		faces.push_back(f);
 	}
 	return faces;
