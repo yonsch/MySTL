@@ -51,6 +51,10 @@ void Game::initSystems() {
 
 	mesh = Mesh(data, 3);
 	shader = Shader(vertex, fragment);
+
+	float PI = 3.14159265359f;
+	projection = mat4::perspective(PI / 2, _screenWidth / _screenHeight, 0.1f, 1000);
+	camera *= mat4::rotation(vec3::UP, PI / 2) * mat4::translation(0, 0, -3);
 }
 void Game::processInput() {
 	SDL_Event evnt;
@@ -61,7 +65,8 @@ void Game::processInput() {
 			_gameState = GameState::EXIT;
 			break;
 		case SDL_MOUSEMOTION:
-			std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
+			//std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
+			break;
 		}
 	}
 }
@@ -75,9 +80,9 @@ void Game::drawGame() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	shader.bind();
+	shader.loadUniform("mvp", projection * (camera * transform));
 	mesh.draw();
 	shader.unbind();
 
 	SDL_GL_SwapWindow(_window);
-
 }

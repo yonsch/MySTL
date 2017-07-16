@@ -5,35 +5,42 @@
 
 using namespace std;
 
-int createShader(const string& shader, int type) {
-	int id = glCreateShader(type);
+void Shader::createShader(const string& source, int type) {
+	int shader = glCreateShader(type);
 
-	const char *c_str = shader.c_str();
-	glShaderSource(id, 1, &c_str, NULL);
-	glCompileShader(id);
+	const char *c_str = source.c_str();
+	glShaderSource(shader, 1, &c_str, NULL);
+	glCompileShader(shader);
 
 	int compiled;
-	glGetShaderiv(id, GL_COMPILE_STATUS, &compiled);
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
 		int length = 0;
-		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &length);
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
 
 		char* log = new char[length];
-		glGetShaderInfoLog(id, length, &length, &log[0]);
+		glGetShaderInfoLog(shader, length, &length, &log[0]);
 		cout << log << endl;
+		return;
 	}
 
-	return id;
+	int i = 0;
+	while ((i = source.find("uniform", i + 1)) != -1) {
+		int end = source.find(';', i + 1), start = source.rfind(' ', end);
+		const char* name = source.substr(start + 1, end - start - 1).c_str();
+		
+		uniforms[name] = glGetUniformLocation(id, name);
+	}
+
+	glAttachShader(id, shader);
+	glDeleteShader(shader);
 }
 
 Shader::Shader(const string& vertex, const string& fragment) {
-	int vertexID = createShader(vertex, GL_VERTEX_SHADER);
-	int fragmentID = createShader(fragment, GL_FRAGMENT_SHADER);
-
 	id = glCreateProgram();
-
-	glAttachShader(id, vertexID);
-	glAttachShader(id, fragmentID);
+	
+	createShader(vertex, GL_VERTEX_SHADER);
+	createShader(fragment, GL_FRAGMENT_SHADER);
 
 	glLinkProgram(id);
 	glValidateProgram(id);
@@ -49,12 +56,14 @@ Shader::Shader(const string& vertex, const string& fragment) {
 		cout << log << endl;
 	}
 
-
-	glDeleteShader(vertexID);
-	glDeleteShader(fragmentID);
-
 	glBindAttribLocation(id, 0, "position");
 }
 
 void Shader::bind() { glUseProgram(id); }
 void Shader::unbind() { glUseProgram(0); }
+
+void Shader::loadUniform(const char* name, int v) { glUniform1i(uniforms[name], v); }
+void Shader::loadUniform(const char* name, float v) { glUniform1f(uniforms[name], v); }
+void Shader::loadUniform(const char* name, const vec2& v) { glUniform2f(uniforms[name], v.x, v.y); }
+void Shader::loadUniform(const char* name, const vec3& v) { glUniform3f(uniforms[name], v.x, v.y, v.z); }
+void Shader::loadUniform(const char* name, const mat4& v) { glUniformMatrix4fv(uniforms[name], 1, true, (const float*) v); }
