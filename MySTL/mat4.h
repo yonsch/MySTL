@@ -1,7 +1,6 @@
 #pragma once
 
-#include "quaternion.h"
-#include "vec3.h"
+#include "math3d.h"
 #include <array>
 #include <iostream>
 

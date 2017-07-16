@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "vec3.h"
+#include "math3d.h"
 
 struct vec2
 {
@@ -27,7 +27,7 @@ struct vec2
 	vec2& operator*=(float f);
 	vec2& operator/=(float f);
 
-	explicit inline operator vec3() { return vec3(x, y, 0); }
+	explicit operator vec3();
 };
 
 // vector negation
@@ -43,6 +43,6 @@ inline vec2 normalize(const vec2& v) { return v / length(v); }
 
 inline float dot(const vec2& l, const vec2& r) { return l.x * r.x + l.y * r.y; }
 
-inline vec3 cross(const vec2& l, const vec2& r) { return vec3(0, 0, l.x * r.y - l.y * r.x); }
+vec3 cross(const vec2& l, const vec2& r);
 
 vec2 rotate(const vec2& v, float angle);

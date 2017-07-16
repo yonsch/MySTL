@@ -1,7 +1,7 @@
 #include "game.h"
 #include <iostream>
 #include <string>
-#include <glew/glew.h>
+#include <glew.h>
 
 void fatalError(std::string errorString) {
 	std::cout << errorString << std::endl;

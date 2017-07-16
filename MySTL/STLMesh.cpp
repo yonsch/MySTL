@@ -47,7 +47,7 @@ void STLMesh::toFile(string path) const {
 	//write header
 	output << header;
 	byte z = 0;
-	for (int i = 0; i < 80 - header.size(); i++) {
+	for (unsigned int i = 0; i < 80 - header.size(); i++) {
 		output << z;
 	}
 
@@ -100,7 +100,7 @@ vector<Face> STLMesh::prism(vector<vec3> layer, vec3 h) {
 
 	vector<vec3> copies;
 	vec3 v;
-	for (int i = 0; i < layer.size(); i++) {
+	for (unsigned int i = 0; i < layer.size(); i++) {
 		copies.push_back(layer[i] + h);
 	}
 
@@ -167,11 +167,11 @@ vector<Face> STLMesh::prism(vector<vec3> layer, vec3 h) {
 }
 
 vector<Face> STLMesh::revolve(vector<vec3> vecs, float res) {
-	float PI = 3.14159265359;
+	float PI = 3.14159265359f;
 	vector<vector<vec3>> vertices;
 
 	//create point cloud
-	for (int layer = 0; layer < vecs.size(); layer++) {
+	for (unsigned int layer = 0; layer < vecs.size(); layer++) {
 		vector<vec3> v;
 		vertices.push_back(v);
 		for (int i = 0; i < res; i++) {

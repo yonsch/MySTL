@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include "math3d.h"
 
 struct vec3
 {
@@ -25,6 +26,17 @@ struct vec3
 	vec3& operator-=(const vec3& v);
 	vec3& operator*=(float f);
 	vec3& operator/=(float f);
+
+	vec3 rotate(const quaternion& rotation) const;
+	vec3 rotate(const vec3& axis, float angle) const;
+
+	// basic axes vectors, defined in source file
+	static const vec3 RIGHT;
+	static const vec3 LEFT;
+	static const vec3 UP;
+	static const vec3 DOWN;
+	static const vec3 FORWARD;
+	static const vec3 BACK;
 };
 
 // vector negation

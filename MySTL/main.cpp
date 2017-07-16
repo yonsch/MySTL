@@ -1,4 +1,5 @@
 #include <Windows.h>
+#include "math3d.h"
 #include "game.h"
 
 using namespace std;

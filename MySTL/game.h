@@ -3,7 +3,7 @@
 #include "shader.h"
 #include "mesh.h"
 #include <string>
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 enum class GameState { PLAY, EXIT };
 

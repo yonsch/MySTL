@@ -67,5 +67,5 @@ void makeCurve() {
 
 
 float f(float x) {
-	return (1 / (1 + pow(2.7182f, (-x) / 10))) * 20 + 10.0;
+	return (1 / (1 + pow(2.7182f, (-x) / 10))) * 20 + 10.0f;
 }

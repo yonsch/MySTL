@@ -1,5 +1,5 @@
 #include "shader.h"
-#include <glew/glew.h>
+#include <glew.h>
 #include <iostream>
 #include <vector>
 
