@@ -1,5 +1,7 @@
 #include "quaternion.h"
 
+//git test
+
 quaternion::quaternion(const vec3& axis, float angle) {
 	float sin = std::sin(angle / 2);
 
