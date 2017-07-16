@@ -1,6 +1,15 @@
 #include "mat4.h"
+#include <iterator>
 
 using namespace std;
+
+// memory-safe assignment
+mat4& mat4::operator=(mat4 other) {
+	mat4 temp(other);
+	swap(temp.m, m);
+
+	return *this;
+}
 
 mat4::mat4(const mat4& copy) {
 	m = new float[16];

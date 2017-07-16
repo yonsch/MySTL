@@ -48,13 +48,15 @@ void Game::initSystems() {
 	}
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	glClearColor(1.f, 1.f, 0.f, 1.f);
+	glDisable(GL_CULL_FACE);
 
-	mesh = Mesh(data, 3);
+	mesh = Mesh(data, 12);
 	shader = Shader(vertex, fragment);
 
 	float PI = 3.14159265359f;
 	projection = mat4::perspective(PI / 2, _screenWidth / _screenHeight, 0.1f, 1000);
-	camera *= mat4::rotation(vec3::UP, PI / 2) * mat4::translation(0, 0, -3);
+	camera *= mat4::translation(0, 0, -3);
+	camera = mat4(camera);
 }
 void Game::processInput() {
 	SDL_Event evnt;
@@ -65,7 +67,9 @@ void Game::processInput() {
 			_gameState = GameState::EXIT;
 			break;
 		case SDL_MOUSEMOTION:
-			//std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
+			camera *= mat4::rotation(vec3::UP, evnt.motion.x / 1000.f);
+			camera *= mat4::rotation(vec3::RIGHT, evnt.motion.y / 1000.f);
+			std::cout << evnt.motion.x << " " << evnt.motion.y << std::endl;
 			break;
 		}
 	}
@@ -80,7 +84,7 @@ void Game::drawGame() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	shader.bind();
-	shader.loadUniform("mvp", projection * (camera * transform));
+	//shader.loadUniform("mvp", transform);
 	mesh.draw();
 	shader.unbind();
 

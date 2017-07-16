@@ -14,6 +14,8 @@ public:
 
 	inline ~mat4() { delete[] m; }
 
+	mat4& operator=(mat4 other);
+
 	// enable matrix access (e.g. matrix[1][0])
 	inline const float* operator[](unsigned int row) const { return m + row * 4; }
 	inline float* operator[](unsigned int row) { return m + row * 4; }

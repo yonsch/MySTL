@@ -28,6 +28,9 @@ struct vec2
 	vec2& operator/=(float f);
 
 	explicit operator vec3();
+
+	explicit inline operator float* () { return &x; }
+	explicit inline operator const float* () const { return &x; }
 };
 
 // vector negation

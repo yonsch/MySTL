@@ -37,6 +37,9 @@ struct vec3
 	static const vec3 DOWN;
 	static const vec3 FORWARD;
 	static const vec3 BACK;
+
+	explicit inline operator float* () { return &x; }
+	explicit inline operator const float* () const { return &x; }
 };
 
 // vector negation
