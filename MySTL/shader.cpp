@@ -23,17 +23,18 @@ void Shader::createShader(const string& source, int type) {
 		cout << log << endl;
 		return;
 	}
+	
+	glAttachShader(id, shader);
+	glDeleteShader(shader);
+}
 
+void Shader::addUniforms(const string& source) {
 	int i = 0;
 	while ((i = source.find("uniform", i + 1)) != -1) {
 		int end = source.find(';', i + 1), start = source.rfind(' ', end);
-		const char* name = source.substr(start + 1, end - start - 1).c_str();
-		
-		uniforms[name] = glGetUniformLocation(id, name);
+		string name = source.substr(start + 1, end - start - 1);
+		uniforms[name] = glGetUniformLocation(id, name.c_str());
 	}
-
-	glAttachShader(id, shader);
-	glDeleteShader(shader);
 }
 
 Shader::Shader(const string& vertex, const string& fragment) {
@@ -56,14 +57,19 @@ Shader::Shader(const string& vertex, const string& fragment) {
 		cout << log << endl;
 	}
 
+	addUniforms(vertex + fragment);
 	glBindAttribLocation(id, 0, "position");
 }
 
 void Shader::bind() { glUseProgram(id); }
 void Shader::unbind() { glUseProgram(0); }
 
-void Shader::loadUniform(const char* name, int v) { glUniform1i(uniforms[name], v); }
-void Shader::loadUniform(const char* name, float v) { glUniform1f(uniforms[name], v); }
-void Shader::loadUniform(const char* name, const vec2& v) { glUniform2f(uniforms[name], v.x, v.y); }
-void Shader::loadUniform(const char* name, const vec3& v) { glUniform3f(uniforms[name], v.x, v.y, v.z); }
-void Shader::loadUniform(const char* name, const mat4& v) { glUniformMatrix4fv(uniforms[name], 1, true, (const float*) v); }
+void Shader::loadUniform(const string& name, int v) { glUniform1i(uniforms[name], v); }
+void Shader::loadUniform(const string& name, float v) { glUniform1f(uniforms[name], v); }
+void Shader::loadUniform(const string& name, const vec2& v) { glUniform2f(uniforms[name], v.x, v.y); }
+void Shader::loadUniform(const string& name, const vec3& v) { glUniform3f(uniforms[name], v.x, v.y, v.z); }
+void Shader::loadUniform(const string& name, const mat4& v) { glUniformMatrix4fv(uniforms[name], 1, true, (const float*) v); }
+void Shader::loadUniform(const string& name, const Texture& v) {
+	v.bind();
+	loadUniform(name, (int) v.unit);
+}

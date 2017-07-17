@@ -12,6 +12,8 @@
     <ClCompile Include="vec3.cpp" />
     <ClCompile Include="mat4.cpp" />
     <ClCompile Include="quaternion.cpp" />
+    <ClCompile Include="frame_buffer.cpp" />
+    <ClCompile Include="texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="examples.h" />
@@ -100,6 +102,8 @@
     <ClInclude Include="include\wglew.h" />
     <ClInclude Include="math3d.h" />
     <ClInclude Include="transform.h" />
+    <ClInclude Include="frame_buffer.h" />
+    <ClInclude Include="texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="glew32.dll" />

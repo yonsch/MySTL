@@ -24,25 +24,38 @@ class Game
 
 	bool captureMouse = false;
 
+	float* data = new float[18] {-1, -1, 0, -1, 1, 0, 1, 1, 0, 1, 1, 0, 1, -1, 0, -1, -1, 0};
 	STLMesh pig = STLMesh("pig.stl");
-	Mesh mesh;
+	Mesh mesh, screen;
 
 	Transform camera = Transform(true), transform;
 	mat4 projection;
 	std::string vertex = "#version 330"
 		"\nin vec3 position;"
-		"\nout float depth;"
 		"\nuniform mat4 mvp;"
 		"\nvoid main() { "
 		"\n	gl_Position = mvp * vec4(position, 1.0);"
-		"\n	depth = gl_Position.z; "
 		"\n}";
 	std::string fragment = "#version 330"
-		"\nin float depth;"
+		"\nvoid main() {}";
+
+	std::string vertexScreen = "#version 330"
+		"\nin vec3 position;"
+		"\nout vec2 tex;"
 		"\nvoid main() {"
-		"\n	gl_FragColor = vec4(vec3(depth), 1.0);"
+		"\n	gl_Position = vec4(position, 1.0);"
+		"\n tex = position.xy / 2.0 + 0.5;"
 		"\n}";
-	Shader shader;
+	std::string fragmentScreen = "#version 330"
+		"\nin vec2 tex;"
+		"\nuniform sampler2D diffuse;"
+		"\nvoid main() {"
+		"\n	gl_FragColor = vec4(vec3(1.0 - texture(diffuse, tex).x) * 5.0, 1.0);"
+		"\n}";
+
+	Shader shader, shaderScreen;
+	FrameBuffer fbo;
+	Texture depthBuffer;
 
 public:
 	Game();

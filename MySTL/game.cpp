@@ -3,6 +3,7 @@
 #include <string>
 #include <glew.h>
 #include "STLMesh.h"
+#include <SDL_image.h>
 
 void fatalError(std::string errorString) {
 	std::cout << errorString << std::endl;
@@ -48,18 +49,23 @@ void Game::initSystems() {
 		fatalError("glew init");
 	}
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	glClearColor(1.f, 1.f, 0.f, 1.f);
+	glClearColor(0, 0, 0, 1);
 	glCullFace(GL_BACK);
 	glFrontFace(GL_CW);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 
 	mesh = (Mesh) pig;
+	screen = Mesh(data, 6);
+	shaderScreen = Shader(vertexScreen, fragmentScreen);
 	shader = Shader(vertex, fragment);
+		
+	depthBuffer = Texture(_screenWidth, _screenHeight, 0, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT);
+	fbo = FrameBuffer(_screenWidth, _screenHeight, 1, &depthBuffer);
 
 	float PI = 3.14159265359f;
 	projection = mat4::perspective(PI / 2, (float)_screenWidth / _screenHeight, 0.1f, 1000);
-	transform.move(0, -2, -5).rotate(vec3::LEFT, PI/2).rotate(vec3::UP, PI/2);
+	transform.scale(0.5f).move(0, -2, -5).rotate(vec3::LEFT, PI/2).rotate(vec3::UP, PI/2);
 }
 
 void Game::processInput() {
@@ -113,14 +119,19 @@ void Game::gameLoop() {
 	}
 }
 void Game::drawGame() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	fbo.bind();
 	shader.bind();
 	shader.loadUniform("mvp", (mat4)projection * ((mat4)camera * transform));
-	vec3 d = camera.rot.getForward();
-	glClearColor(d.x, d.y, d.z, 1);
 	mesh.draw();
 	shader.unbind();
+	fbo.unbind();
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	shaderScreen.bind();
+	shaderScreen.loadUniform("diffuse", depthBuffer);
+	screen.draw();
+	shaderScreen.unbind();
 
 	SDL_GL_SwapWindow(_window);
 }
