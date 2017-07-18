@@ -9,7 +9,7 @@ class quaternion
 public:
 	float x, y, z, w;
 
-	inline quaternion() : w(1) {}
+	inline quaternion() : quaternion(0, 0, 0, 1) {}
 	inline quaternion(const quaternion& copy) : quaternion(copy.x, copy.y, copy.z, copy.w) {}
 
 	quaternion(const vec3& axis, float angle);

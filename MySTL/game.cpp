@@ -60,12 +60,13 @@ void Game::initSystems() {
 	shaderScreen = Shader(vertexScreen, fragmentScreen);
 	shader = Shader(vertex, fragment);
 		
-	depthBuffer = Texture(_screenWidth, _screenHeight, 0, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT);
+	depthBuffer = Texture(_screenWidth, _screenHeight, 0, GL_RGB16F, GL_RGB, GL_FLOAT);
 	fbo = FrameBuffer(_screenWidth, _screenHeight, 1, &depthBuffer);
 
 	float PI = 3.14159265359f;
+	camera.move(0, 0, 5);
 	projection = mat4::perspective(PI / 2, (float)_screenWidth / _screenHeight, 0.1f, 1000);
-	transform.scale(0.5f).move(0, -2, -5).rotate(vec3::LEFT, PI/2).rotate(vec3::UP, PI/2);
+	transform.scale(0.5f).rotate(vec3::LEFT, PI/2).rotate(vec3::UP, PI/2);
 }
 
 void Game::processInput() {
@@ -121,7 +122,9 @@ void Game::gameLoop() {
 void Game::drawGame() {
 	fbo.bind();
 	shader.bind();
-	shader.loadUniform("mvp", (mat4)projection * ((mat4)camera * transform));
+	shader.loadUniform("mvp", projection * ((mat4)camera * transform));
+	shader.loadUniform("camPos", camera.pos);
+	shader.loadUniform("model", transform);
 	mesh.draw();
 	shader.unbind();
 	fbo.unbind();

@@ -33,11 +33,19 @@ class Game
 	std::string vertex = "#version 330"
 		"\nin vec3 position;"
 		"\nuniform mat4 mvp;"
+		"\nuniform mat4 model;"
+		"\nout vec3 pos;"
 		"\nvoid main() { "
 		"\n	gl_Position = mvp * vec4(position, 1.0);"
+		"\n	pos = (model * vec4(position, 0.0)).xyz;"
 		"\n}";
 	std::string fragment = "#version 330"
-		"\nvoid main() {}";
+		"\nin vec3 pos;"
+		"\nuniform vec3 camPos;"
+		"\nlayout(location=0) out vec3 position;"
+		"\nvoid main() {"
+		"\n position = pos;"
+		"\n}";
 
 	std::string vertexScreen = "#version 330"
 		"\nin vec3 position;"
@@ -50,7 +58,7 @@ class Game
 		"\nin vec2 tex;"
 		"\nuniform sampler2D diffuse;"
 		"\nvoid main() {"
-		"\n	gl_FragColor = vec4(vec3(1.0 - texture(diffuse, tex).x) * 5.0, 1.0);"
+		"\n	gl_FragColor = vec4(texture(diffuse, tex).zzz, 1.0);"
 		"\n}";
 
 	Shader shader, shaderScreen;
