@@ -124,7 +124,11 @@ void Game::drawGame() {
 	shader.bind();
 	shader.loadUniform("mvp", projection * ((mat4)camera * transform));
 	shader.loadUniform("camPos", camera.pos);
-	shader.loadUniform("model", transform);
+	mat4 m = (mat4)camera;
+	for (int i = 0; i < 4; i++)
+		for (int j = 0; j < 4; j++)
+			if (!(i != 3 && i == j)) m[i][j] /= 5;
+	shader.loadUniform("model", m * transform);
 	mesh.draw();
 	shader.unbind();
 	fbo.unbind();
